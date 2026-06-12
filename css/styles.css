@@ -67,3 +67,47 @@ h3 { font-size: 1.1rem; }
   to { transform: translateY(-22px); }
 }
 svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
+
+/* ===== Ziffernblock ===== */
+.numpad-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  max-width: 320px; margin: 0 auto; width: 100%;
+}
+.taste {
+  font: inherit; font-size: 1.7rem; font-weight: bold;
+  padding: 14px 0; min-height: 60px;
+  background: #ffffff; color: var(--tinte);
+  border: 3px solid var(--tinte); border-radius: var(--radius);
+  box-shadow: var(--schatten); cursor: pointer;
+  transition: transform 0.06s ease-out;
+}
+.taste:active { transform: translateY(3px); box-shadow: none; }
+.taste.ok { background: var(--gruen); }
+.taste.loeschen { background: var(--bg-akzent); }
+
+/* ===== Schrauber ===== */
+.schrauber { width: 84px; text-align: center; }
+.schrauber-svg { width: 64px; height: auto; }
+.schrauber-text { font-size: 0.85rem; font-weight: bold; min-height: 1.2em; }
+@keyframes schrauber-hops {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-12px) rotate(-4deg); }
+  60% { transform: translateY(0) rotate(3deg); }
+}
+.schrauber.jubel .schrauber-svg { animation: schrauber-hops 0.5s ease-in-out 2; }
+@keyframes schrauber-wackel {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+.schrauber.trost .schrauber-svg { animation: schrauber-wackel 0.6s ease-in-out 2; }
+
+/* ===== Konfetti ===== */
+@keyframes konfetti-fall {
+  to { transform: translateY(110vh) rotate(720deg); }
+}
+.konfetti {
+  position: fixed; top: -14px; width: 10px; height: 14px;
+  border-radius: 3px; z-index: 9; pointer-events: none;
+  animation: konfetti-fall linear forwards;
+}
