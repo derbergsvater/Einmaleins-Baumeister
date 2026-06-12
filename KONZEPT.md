@@ -86,6 +86,10 @@ Das Kind wählt beim Start ein Bauprojekt. Jedes Projekt besteht aus ca. **12 Ba
 - **Trainingsbalken pro Reihe:** füllt sich durch richtige Antworten (Richtwert: 20
   Punkte = voll). Erst dann ist die Meisterprüfung wählbar — verhindert, dass Kinder
   sich durch Raten zur Prüfung mogeln.
+- **Addon-Vorschau (Bauplan):** Während eine Reihe trainiert wird, erscheint ihr
+  Addon als blasser Bauplan auf dem Auto und wird mit jedem richtigen Ergebnis
+  sichtbarer. Die Meisterprüfung „schraubt es fest" (volle Farbe). So baut jedes
+  Rechnen sichtbar weiter — auch wenn der Grundbau längst fertig ist.
 - **Combo-Schrauber:** Mehrere richtige Antworten in Folge geben Bonuspunkte auf den
   Trainingsbalken (x1 → x2 → x3, sichtbar als glühender Schraubenschlüssel). Starke
   Rechner kommen so schneller voran und langweilen sich nicht; schwächere Kinder

@@ -1,8 +1,8 @@
 import { pickTask, taskKey, loesung } from '../engine/tasks.js';
 import { applyAnswer, pruefungBereit, TRAINING_ZIEL, comboStufe } from '../engine/progress.js';
-import { PARTS, addonsUnlocked } from '../projects/rennwagen.js';
+import { PARTS, addonsUnlocked, addonFuerReihe } from '../projects/rennwagen.js';
 import { RENNWAGEN_SVG } from '../projects/rennwagen.svg.js';
-import { mountCar, updateCar, montiere } from '../ui/carRenderer.js';
+import { mountCar, updateCar, montiere, zeigeVorschau, wackel } from '../ui/carRenderer.js';
 import { createNumpad } from '../ui/numpad.js';
 import { createSchrauber } from '../ui/schrauber.js';
 import { sound } from '../audio.js';
@@ -56,6 +56,8 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     const stufe = comboStufe(streak);
     comboEl.textContent = stufe > 1 ? `🔥 x${stufe}` : '';
     pruefungBtn.classList.toggle('verborgen', !pruefungBereit(stand.training) || stand.gemeistert);
+    const addon = addonFuerReihe(reihe);
+    if (addon) zeigeVorschau(buehne, addon.id, stand.training / TRAINING_ZIEL);
   }
 
   function naechsteAufgabe() {
@@ -92,6 +94,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
         schrauber.setMood('jubel');
       } else {
         sound.richtig();
+        wackel(buehne);
         if (neu.punkte > 1) schrauber.setMood('jubel');
       }
       ctx.store.update(profil);

@@ -67,6 +67,13 @@ h3 { font-size: 1.1rem; }
   to { transform: translateY(-22px); }
 }
 svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
+.addon.bauplan { filter: grayscale(0.8) brightness(1.15); transition: opacity 0.3s ease; }
+@keyframes wackelt-kurz {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.02) rotate(0.4deg); }
+  100% { transform: scale(1); }
+}
+.auto-buehne.wackelt { animation: wackelt-kurz 0.3s ease-out; }
 
 /* ===== Ziffernblock ===== */
 .numpad-grid {
