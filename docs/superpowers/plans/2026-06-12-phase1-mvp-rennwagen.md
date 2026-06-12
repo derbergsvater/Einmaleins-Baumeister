@@ -80,7 +80,7 @@ tests/rennwagen.test.mjs        Projekt-Definition + Freischalt-Logik + SVG-Voll
 
 Noch keine Tests (kein logiktragender Code) — der Router wird in Task 10–14 durch die Screens manuell mitgetestet. `js/app.js` importiert die Screens erst ab Task 10; bis dahin zeigt er einen Platzhalter.
 
-- [ ] **Step 1: package.json anlegen**
+- [x] **Step 1: package.json anlegen**
 
 ```json
 {
@@ -93,14 +93,14 @@ Noch keine Tests (kein logiktragender Code) — der Router wird in Task 10–14 
 }
 ```
 
-- [ ] **Step 2: .gitignore anlegen**
+- [x] **Step 2: .gitignore anlegen**
 
 ```
 node_modules/
 *.log
 ```
 
-- [ ] **Step 3: index.html anlegen**
+- [x] **Step 3: index.html anlegen**
 
 ```html
 <!DOCTYPE html>
@@ -119,7 +119,7 @@ node_modules/
 </html>
 ```
 
-- [ ] **Step 4: js/app.js anlegen (Router-Skelett mit Platzhalter)**
+- [x] **Step 4: js/app.js anlegen (Router-Skelett mit Platzhalter)**
 
 ```js
 // Screen-Router: Screens registrieren sich hier, navigate() tauscht den Inhalt.
@@ -142,7 +142,7 @@ export function navigate(name, params = {}) {
 navigate('start');
 ```
 
-- [ ] **Step 5: css/styles.css anlegen (Basis: Variablen, Reset, Layout, Buttons)**
+- [x] **Step 5: css/styles.css anlegen (Basis: Variablen, Reset, Layout, Buttons)**
 
 ```css
 /* ===== Variablen & Reset ===== */
@@ -198,14 +198,14 @@ h3 { font-size: 1.1rem; }
 }
 ```
 
-- [ ] **Step 6: Syntax prüfen und manuell sichten**
+- [x] **Step 6: Syntax prüfen und manuell sichten**
 
 Run: `node --check js/app.js`
 Expected: kein Syntaxfehler. (`npm test` funktioniert erst ab Task 2, wenn `tests/` existiert.)
 
 Dann `python3 -m http.server 8080` starten, `http://localhost:8080` öffnen: Platzhalter-Screen „Baustelle: Screen „start" kommt noch" erscheint auf beigem Hintergrund.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add package.json .gitignore index.html css/styles.css js/app.js
@@ -222,7 +222,7 @@ git commit -m "Gerüst: HTML, Router-Skelett, Basis-Styles, Test-Setup"
 
 Der Pool einer Reihe enthält die Reihe selbst (z. B. 4·1 … 4·10) plus alle Tauschaufgaben (n·4 für n ≠ 4) → genau 19 Aufgaben. Eine Aufgabe ist `{ a, b }`, ihr Schlüssel `"4x7"`.
 
-- [ ] **Step 1: Failing Tests schreiben**
+- [x] **Step 1: Failing Tests schreiben**
 
 `tests/tasks.test.mjs`:
 
@@ -254,12 +254,12 @@ test('istAnker erkennt 1, 2, 5, 10 als leichten Partner-Faktor', () => {
 });
 ```
 
-- [ ] **Step 2: Tests laufen lassen — müssen fehlschlagen**
+- [x] **Step 2: Tests laufen lassen — müssen fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module .../js/engine/tasks.js`
 
-- [ ] **Step 3: Implementierung**
+- [x] **Step 3: Implementierung**
 
 `js/engine/tasks.js`:
 
@@ -295,12 +295,12 @@ export function istAnker(t, reihe) {
 }
 ```
 
-- [ ] **Step 4: Tests laufen lassen — müssen bestehen**
+- [x] **Step 4: Tests laufen lassen — müssen bestehen**
 
 Run: `npm test`
 Expected: PASS (3 Tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/engine/tasks.js tests/tasks.test.mjs
@@ -317,7 +317,7 @@ git commit -m "Engine: Aufgabenpool mit Tauschaufgaben und Anker-Erkennung"
 
 `pickTask()` setzt KONZEPT §3.4 um: Anker-Phase am Reihen-Anfang, Gewichtung schwacher Aufgaben, Frust-Bremse nach 3 Fehlern in Folge, keine direkte Wiederholung. Der Zufall (`rng`) ist injizierbar, damit Tests deterministisch sind.
 
-- [ ] **Step 1: Failing Tests ergänzen**
+- [x] **Step 1: Failing Tests ergänzen**
 
 An `tests/tasks.test.mjs` anhängen:
 
@@ -392,12 +392,12 @@ test('keine direkte Wiederholung derselben Aufgabe', () => {
 });
 ```
 
-- [ ] **Step 2: Tests laufen lassen — müssen fehlschlagen**
+- [x] **Step 2: Tests laufen lassen — müssen fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `pickTask`, `gewicht`, `totalRichtig`, `ANKER_PHASE_BIS` nicht exportiert
 
-- [ ] **Step 3: Implementierung ergänzen**
+- [x] **Step 3: Implementierung ergänzen**
 
 An `js/engine/tasks.js` anhängen:
 
@@ -449,12 +449,12 @@ export function pickTask({ reihe, stats = {}, lastKey = null, wrongStreak = 0 },
 }
 ```
 
-- [ ] **Step 4: Tests laufen lassen — müssen bestehen**
+- [x] **Step 4: Tests laufen lassen — müssen bestehen**
 
 Run: `npm test`
 Expected: PASS (9 Tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/engine/tasks.js tests/tasks.test.mjs
@@ -471,7 +471,7 @@ git commit -m "Engine: adaptive Aufgabenauswahl (Anker-Phase, Gewichtung, Frust-
 
 Combo-Schrauber (KONZEPT §3.3): Serien richtiger Antworten geben Multiplikator x1/x2/x3 auf den Trainingsbalken (Ziel: 20 Punkte). Fehler setzen nur die Combo zurück, nie den Balken.
 
-- [ ] **Step 1: Failing Tests schreiben**
+- [x] **Step 1: Failing Tests schreiben**
 
 `tests/progress.test.mjs`:
 
@@ -516,12 +516,12 @@ test('pruefungBereit erst bei vollem Balken', () => {
 });
 ```
 
-- [ ] **Step 2: Tests laufen lassen — müssen fehlschlagen**
+- [x] **Step 2: Tests laufen lassen — müssen fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module .../js/engine/progress.js`
 
-- [ ] **Step 3: Implementierung**
+- [x] **Step 3: Implementierung**
 
 `js/engine/progress.js`:
 
@@ -553,12 +553,12 @@ export function pruefungBereit(training) {
 }
 ```
 
-- [ ] **Step 4: Tests laufen lassen — müssen bestehen**
+- [x] **Step 4: Tests laufen lassen — müssen bestehen**
 
 Run: `npm test`
 Expected: PASS (alle bisherigen + 5 neue)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/engine/progress.js tests/progress.test.mjs
@@ -575,7 +575,7 @@ git commit -m "Engine: Trainingsbalken mit Combo-Schrauber (x1/x2/x3)"
 
 12 gemischte Aufgaben aus dem Reihen-Pool ohne Wiederholung, bestanden bei höchstens 1 Fehler, **ohne Zeitlimit** (KONZEPT §8 Punkt 2).
 
-- [ ] **Step 1: Failing Tests ergänzen**
+- [x] **Step 1: Failing Tests ergänzen**
 
 An `tests/progress.test.mjs` anhängen:
 
@@ -619,12 +619,12 @@ test('evalExam: abgebrochene Prüfung gilt nicht als bestanden', () => {
 });
 ```
 
-- [ ] **Step 2: Tests laufen lassen — müssen fehlschlagen**
+- [x] **Step 2: Tests laufen lassen — müssen fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `createExam` nicht exportiert
 
-- [ ] **Step 3: Implementierung ergänzen**
+- [x] **Step 3: Implementierung ergänzen**
 
 An `js/engine/progress.js` anhängen:
 
@@ -650,12 +650,12 @@ export function evalExam(ergebnisse) {
 }
 ```
 
-- [ ] **Step 4: Tests laufen lassen — müssen bestehen**
+- [x] **Step 4: Tests laufen lassen — müssen bestehen**
 
 Run: `npm test`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/engine/progress.js tests/progress.test.mjs
@@ -672,7 +672,7 @@ git commit -m "Engine: Meisterprüfung (12 Aufgaben, max. 1 Fehler, ohne Zeitlim
 
 Geräte-Profile ohne Server (KONZEPT §4). Storage wird injiziert, damit Tests ohne Browser laufen. Kaputtes JSON führt zu einem frischen Zustand statt Crash.
 
-- [ ] **Step 1: Failing Tests schreiben**
+- [x] **Step 1: Failing Tests schreiben**
 
 `tests/profiles.test.mjs`:
 
@@ -737,12 +737,12 @@ test('zwei Profile mit gleichem Namen bekommen verschiedene IDs', () => {
 });
 ```
 
-- [ ] **Step 2: Tests laufen lassen — müssen fehlschlagen**
+- [x] **Step 2: Tests laufen lassen — müssen fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module .../js/store/profiles.js`
 
-- [ ] **Step 3: Implementierung**
+- [x] **Step 3: Implementierung**
 
 `js/store/profiles.js`:
 
@@ -804,12 +804,12 @@ export function createStore(storage) {
 }
 ```
 
-- [ ] **Step 4: Tests laufen lassen — müssen bestehen**
+- [x] **Step 4: Tests laufen lassen — müssen bestehen**
 
 Run: `npm test`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/store/profiles.js tests/profiles.test.mjs
@@ -826,7 +826,7 @@ git commit -m "Store: Geräte-Profile auf localStorage (injizierbarer Storage)"
 
 12 Bauteile in Montage-Reihenfolge, 10 Addons gekoppelt an Reihe 1–10. Das „Fliegende Auto" (Reihe 10) verlangt zusätzlich **alle** 10 Reihen (KONZEPT §3.1).
 
-- [ ] **Step 1: Failing Tests schreiben**
+- [x] **Step 1: Failing Tests schreiben**
 
 `tests/rennwagen.test.mjs`:
 
@@ -878,12 +878,12 @@ test('addonFuerReihe und gemeisterteReihen', () => {
 });
 ```
 
-- [ ] **Step 2: Tests laufen lassen — müssen fehlschlagen**
+- [x] **Step 2: Tests laufen lassen — müssen fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module .../js/projects/rennwagen.js`
 
-- [ ] **Step 3: Implementierung**
+- [x] **Step 3: Implementierung**
 
 `js/projects/rennwagen.js`:
 
@@ -938,12 +938,12 @@ export function addonFuerReihe(reihe) {
 }
 ```
 
-- [ ] **Step 4: Tests laufen lassen — müssen bestehen**
+- [x] **Step 4: Tests laufen lassen — müssen bestehen**
 
 Run: `npm test`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/projects/rennwagen.js tests/rennwagen.test.mjs
@@ -962,7 +962,7 @@ git commit -m "Projekt Rennwagen: 12 Bauteile, 10 Addons, Freischalt-Logik"
 
 Das SVG ist ein JS-Template-String (kein `fetch`, funktioniert überall). Jedes Bauteil ist `<g id="teil-…" class="teil">`, jedes Addon `<g id="addon-…" class="addon">` — anfangs unsichtbar, per Klasse `sichtbar` eingeblendet. Der Test prüft maschinell, dass **alle** IDs aus Task 7 im SVG vorhanden sind (hält Definition und Grafik synchron).
 
-- [ ] **Step 1: Failing Test ergänzen**
+- [x] **Step 1: Failing Test ergänzen**
 
 An `tests/rennwagen.test.mjs` anhängen:
 
@@ -981,12 +981,12 @@ test('SVG enthält jede Bauteil- und Addon-Gruppe genau einmal', () => {
 });
 ```
 
-- [ ] **Step 2: Test laufen lassen — muss fehlschlagen**
+- [x] **Step 2: Test laufen lassen — muss fehlschlagen**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module .../js/projects/rennwagen.svg.js`
 
-- [ ] **Step 3: SVG implementieren**
+- [x] **Step 3: SVG implementieren**
 
 `js/projects/rennwagen.svg.js`:
 
@@ -1124,12 +1124,12 @@ export const RENNWAGEN_SVG = `
 </svg>`;
 ```
 
-- [ ] **Step 4: Test laufen lassen — muss bestehen**
+- [x] **Step 4: Test laufen lassen — muss bestehen**
 
 Run: `npm test`
 Expected: PASS
 
-- [ ] **Step 5: Car-Renderer implementieren**
+- [x] **Step 5: Car-Renderer implementieren**
 
 `js/ui/carRenderer.js`:
 
@@ -1155,7 +1155,7 @@ export function montiere(el, teilId) {
 }
 ```
 
-- [ ] **Step 6: SVG-Styles in css/styles.css ergänzen**
+- [x] **Step 6: SVG-Styles in css/styles.css ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -1179,7 +1179,7 @@ An `css/styles.css` anhängen:
 svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 ```
 
-- [ ] **Step 7: Syntax-Check und Commit**
+- [x] **Step 7: Syntax-Check und Commit**
 
 Run: `node --check js/ui/carRenderer.js && node --check js/projects/rennwagen.svg.js && npm test`
 Expected: kein Fehler, alle Tests PASS
@@ -1202,7 +1202,7 @@ git commit -m "Rennwagen-SVG mit Bauteil-/Addon-Gruppen + Car-Renderer mit Monta
 
 Reine UI-Bausteine ohne Spiellogik — Verifikation per `node --check` + manuellem Browsertest in Task 12/13.
 
-- [ ] **Step 1: Ziffernblock implementieren**
+- [x] **Step 1: Ziffernblock implementieren**
 
 `js/ui/numpad.js`:
 
@@ -1236,7 +1236,7 @@ export function createNumpad(el, { onChange, onSubmit }) {
 }
 ```
 
-- [ ] **Step 2: Audio implementieren (WebAudio-Synth, keine Dateien)**
+- [x] **Step 2: Audio implementieren (WebAudio-Synth, keine Dateien)**
 
 `js/audio.js`:
 
@@ -1282,7 +1282,7 @@ function createAudio() {
 export const sound = createAudio();
 ```
 
-- [ ] **Step 3: Maskottchen „Schrauber" implementieren**
+- [x] **Step 3: Maskottchen „Schrauber" implementieren**
 
 `js/ui/schrauber.js`:
 
@@ -1333,7 +1333,7 @@ export function createSchrauber(el) {
 }
 ```
 
-- [ ] **Step 4: Konfetti implementieren**
+- [x] **Step 4: Konfetti implementieren**
 
 `js/ui/confetti.js`:
 
@@ -1354,7 +1354,7 @@ export function feuerKonfetti(el, anzahl = 70) {
 }
 ```
 
-- [ ] **Step 5: Styles für die UI-Bausteine ergänzen**
+- [x] **Step 5: Styles für die UI-Bausteine ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -1404,7 +1404,7 @@ An `css/styles.css` anhängen:
 }
 ```
 
-- [ ] **Step 6: Syntax-Check und Commit**
+- [x] **Step 6: Syntax-Check und Commit**
 
 Run: `node --check js/ui/numpad.js && node --check js/audio.js && node --check js/ui/schrauber.js && node --check js/ui/confetti.js && npm test`
 Expected: kein Fehler, Tests weiterhin PASS
@@ -1423,7 +1423,7 @@ git commit -m "UI-Bausteine: Ziffernblock, WebAudio-Sounds, Schrauber-Maskottche
 - Modify: `js/app.js`
 - Modify: `css/styles.css`
 
-- [ ] **Step 1: Screen implementieren**
+- [x] **Step 1: Screen implementieren**
 
 `js/screens/start.js`:
 
@@ -1478,7 +1478,7 @@ export function showStart(root, ctx, navigate) {
 }
 ```
 
-- [ ] **Step 2: Router verdrahten**
+- [x] **Step 2: Router verdrahten**
 
 `js/app.js` komplett ersetzen durch:
 
@@ -1504,7 +1504,7 @@ export function navigate(name, params = {}) {
 navigate(ctx.store.getActive() ? 'hub' : 'start');
 ```
 
-- [ ] **Step 3: Styles ergänzen**
+- [x] **Step 3: Styles ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -1530,7 +1530,7 @@ An `css/styles.css` anhängen:
 .avatar-option input:checked + span { border-color: var(--tinte); background: var(--gelb); }
 ```
 
-- [ ] **Step 4: Manuell testen**
+- [x] **Step 4: Manuell testen**
 
 Run: `node --check js/screens/start.js && node --check js/app.js`, dann Server starten und `http://localhost:8080` öffnen (vorher in DevTools → Application → Local Storage leeren).
 Expected:
@@ -1539,7 +1539,7 @@ Expected:
 3. Seite neu laden → es geht direkt zum Hub-Platzhalter (aktives Profil erkannt).
 4. Local Storage enthält Key `baumeister.v1` mit dem Profil.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/screens/start.js js/app.js css/styles.css
@@ -1555,7 +1555,7 @@ git commit -m "Start-Screen: Profilwahl und Profil anlegen (Name + Avatar)"
 - Modify: `js/app.js`
 - Modify: `css/styles.css`
 
-- [ ] **Step 1: Screen implementieren**
+- [x] **Step 1: Screen implementieren**
 
 `js/screens/hub.js`:
 
@@ -1614,7 +1614,7 @@ export function showHub(root, ctx, navigate) {
 }
 ```
 
-- [ ] **Step 2: Router erweitern**
+- [x] **Step 2: Router erweitern**
 
 In `js/app.js` Import und Registrierung ergänzen:
 
@@ -1628,7 +1628,7 @@ und die Screen-Tabelle erweitern zu:
 const screens = { start: showStart, hub: showHub };
 ```
 
-- [ ] **Step 3: Styles ergänzen**
+- [x] **Step 3: Styles ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -1648,7 +1648,7 @@ An `css/styles.css` anhängen:
 .pokal { font-size: 1.3rem; }
 ```
 
-- [ ] **Step 4: Manuell testen**
+- [x] **Step 4: Manuell testen**
 
 Run: `node --check js/screens/hub.js && node --check js/app.js`, Browser neu laden.
 Expected:
@@ -1657,7 +1657,7 @@ Expected:
 3. Klick auf „4er" → Platzhalter „Baustelle: Screen „werkstatt"".
 4. 👤 führt zurück zum Start-Screen, 🏁 zum Garage-Platzhalter.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/screens/hub.js js/app.js css/styles.css
@@ -1675,7 +1675,7 @@ git commit -m "Hub-Screen: Reihen-Übersicht mit Trainingsbalken, Pokalen und Au
 
 Herzstück: Aufgabe → Antwort über Ziffernblock → richtig: Bauteil-Montage mit Sound + Vibration, Combo, Trainingsbalken; falsch: Lösung kurz zeigen, Schrauber tröstet, weiter. Bei vollem Balken erscheint der Prüfungs-Button.
 
-- [ ] **Step 1: Screen implementieren**
+- [x] **Step 1: Screen implementieren**
 
 `js/screens/werkstatt.js`:
 
@@ -1810,7 +1810,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
 }
 ```
 
-- [ ] **Step 2: Router erweitern**
+- [x] **Step 2: Router erweitern**
 
 In `js/app.js`:
 
@@ -1822,7 +1822,7 @@ import { showWerkstatt } from './screens/werkstatt.js';
 const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt };
 ```
 
-- [ ] **Step 3: Styles ergänzen**
+- [x] **Step 3: Styles ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -1846,7 +1846,7 @@ An `css/styles.css` anhängen:
 .pruefung-knopf { background: var(--gelb); }
 ```
 
-- [ ] **Step 4: Manuell testen (Kern-Durchlauf)**
+- [x] **Step 4: Manuell testen (Kern-Durchlauf)**
 
 Run: `node --check js/screens/werkstatt.js && node --check js/app.js && npm test`, Browser neu laden.
 Expected:
@@ -1859,7 +1859,7 @@ Expected:
 7. „← Reihen" → Hub zeigt Balkenstand der 4er-Reihe und das teilgebaute Auto.
 8. Seite neu laden → Fortschritt ist noch da.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/screens/werkstatt.js js/app.js css/styles.css
@@ -1875,7 +1875,7 @@ git commit -m "Werkstatt-Screen: Kernschleife mit Bauteil-Montage, Combo und Fru
 - Modify: `js/app.js`
 - Modify: `css/styles.css`
 
-- [ ] **Step 1: Screen implementieren**
+- [x] **Step 1: Screen implementieren**
 
 `js/screens/pruefung.js`:
 
@@ -1967,7 +1967,7 @@ export function showPruefung(root, ctx, navigate, { reihe }) {
 }
 ```
 
-- [ ] **Step 2: Router erweitern**
+- [x] **Step 2: Router erweitern**
 
 In `js/app.js`:
 
@@ -1979,7 +1979,7 @@ import { showPruefung } from './screens/pruefung.js';
 const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt, pruefung: showPruefung };
 ```
 
-- [ ] **Step 3: Styles ergänzen**
+- [x] **Step 3: Styles ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -1997,7 +1997,7 @@ An `css/styles.css` anhängen:
 .addon-neu { font-size: 1.15rem; background: var(--gelb); padding: 12px 16px; border-radius: var(--radius); border: 3px solid var(--tinte); }
 ```
 
-- [ ] **Step 4: Manuell testen**
+- [x] **Step 4: Manuell testen**
 
 Run: `node --check js/screens/pruefung.js && node --check js/app.js`, Browser neu laden.
 Expected:
@@ -2008,7 +2008,7 @@ Expected:
 5. Mit 2+ Fehlern: „Fast geschafft!" → zurück in die Werkstatt; nichts ist verloren gegangen.
 6. ✕ bricht ab und führt zurück in die Werkstatt.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/screens/pruefung.js js/app.js css/styles.css
@@ -2024,7 +2024,7 @@ git commit -m "Prüfungs-Screen: Meisterprüfung mit Konfetti-Feier und Addon-Fr
 - Modify: `js/app.js`
 - Modify: `css/styles.css`
 
-- [ ] **Step 1: Screen implementieren**
+- [x] **Step 1: Screen implementieren**
 
 `js/screens/garage.js`:
 
@@ -2095,7 +2095,7 @@ export function showGarage(root, ctx, navigate) {
 }
 ```
 
-- [ ] **Step 2: Router komplettieren**
+- [x] **Step 2: Router komplettieren**
 
 In `js/app.js`:
 
@@ -2107,7 +2107,7 @@ import { showGarage } from './screens/garage.js';
 const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt, pruefung: showPruefung, garage: showGarage };
 ```
 
-- [ ] **Step 3: Styles ergänzen**
+- [x] **Step 3: Styles ergänzen**
 
 An `css/styles.css` anhängen:
 
@@ -2126,7 +2126,7 @@ An `css/styles.css` anhängen:
 .pokal-icon { font-size: 1.5rem; min-height: 1.5em; }
 ```
 
-- [ ] **Step 4: Manuell testen**
+- [x] **Step 4: Manuell testen**
 
 Run: `node --check js/screens/garage.js && node --check js/app.js && npm test`, Browser neu laden.
 Expected:
@@ -2135,7 +2135,7 @@ Expected:
 3. Pokal-Regal: gemeisterte Reihen leuchten mit 🏆, der Rest ist ausgegraut.
 4. Zum Testen des Fliegens: in DevTools-Konsole `localStorage` manipulieren (alle 10 Reihen `gemeistert: true` setzen), neu laden → „Fliegendes Auto" schaltbar, Auto schwebt auf und ab.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/screens/garage.js js/app.js css/styles.css
@@ -2149,12 +2149,12 @@ git commit -m "Garage-Screen: Addons an-/abschaltbar, Pokal-Regal"
 **Files:**
 - Modify: `README.md`
 
-- [ ] **Step 1: Alle Tests laufen lassen**
+- [x] **Step 1: Alle Tests laufen lassen**
 
 Run: `npm test`
 Expected: PASS, 0 Failures
 
-- [ ] **Step 2: Manueller Gesamtdurchlauf (Mobile-Emulation, frischer Local Storage)**
+- [x] **Step 2: Manueller Gesamtdurchlauf (Mobile-Emulation, frischer Local Storage)**
 
 Checkliste — jede Zeile muss stimmen:
 1. Frischer Start → Profil „Ella" + 🦄 anlegen → Hub.
@@ -2172,7 +2172,7 @@ Begeisterungs-Check (KONZEPT §5 — bei Lücken nachbessern, bevor abgeschlosse
 - Prüfungs-Erfolg fühlt sich wie ein Fest an (Fanfare + Konfetti + Pokal)?
 - Schrauber reagiert sichtbar auf Erfolg und Fehler?
 
-- [ ] **Step 3: README aktualisieren**
+- [x] **Step 3: README aktualisieren**
 
 In `README.md` die Status-Zeile ersetzen:
 
@@ -2182,7 +2182,7 @@ In `README.md` die Status-Zeile ersetzen:
 - **Tests:** `npm test` (Node ≥ 20, keine Abhängigkeiten)
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add README.md

@@ -10,4 +10,6 @@ fliegenden Auto).
 
 - **Konzept:** [KONZEPT.md](KONZEPT.md)
 - **Stack:** Vanilla JS, SVG, localStorage, GitHub Pages — kein Backend
-- **Status:** Konzeptphase
+- **Status:** Phase 1 (MVP) spielbar — Rennwagen, Reihen 1–10, Meisterprüfung, Garage
+- **Lokal starten:** `python3 -m http.server 8080` und `http://localhost:8080` öffnen
+- **Tests:** `npm test` (Node ≥ 20, keine Abhängigkeiten)
