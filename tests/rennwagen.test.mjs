@@ -34,6 +34,19 @@ test('Fliegendes Auto erst, wenn ALLE 10 Reihen gemeistert sind', () => {
   assert.equal(frei.length, 10);
 });
 
+import { RENNWAGEN_SVG } from '../js/projects/rennwagen.svg.js';
+
+test('SVG enthält jede Bauteil- und Addon-Gruppe genau einmal', () => {
+  for (const p of PARTS) {
+    const treffer = RENNWAGEN_SVG.split(`id="teil-${p.id}"`).length - 1;
+    assert.equal(treffer, 1, `teil-${p.id}: ${treffer}x im SVG`);
+  }
+  for (const a of ADDONS) {
+    const treffer = RENNWAGEN_SVG.split(`id="addon-${a.id}"`).length - 1;
+    assert.equal(treffer, 1, `addon-${a.id}: ${treffer}x im SVG`);
+  }
+});
+
 test('addonFuerReihe und gemeisterteReihen', () => {
   assert.equal(addonFuerReihe(1).id, 'auspuff');
   assert.equal(addonFuerReihe(10).id, 'fliegen');

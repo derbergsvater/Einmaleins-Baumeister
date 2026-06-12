@@ -49,3 +49,21 @@ h3 { font-size: 1.1rem; }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* ===== Auto-Bühne & SVG ===== */
+.auto-buehne { width: 100%; }
+.auto-buehne svg { width: 100%; height: auto; display: block; }
+.auto-buehne.klein { max-width: 340px; margin: 0 auto; }
+.teil, .addon { opacity: 0; transition: opacity 0.4s ease; }
+.sichtbar { opacity: 1; }
+@keyframes montage-pop {
+  0% { transform: translateY(-40px) scale(0.3); opacity: 0; }
+  60% { transform: translateY(4px) scale(1.12); opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+.teil.montiert { animation: montage-pop 0.6s ease-out; transform-box: fill-box; transform-origin: center; }
+@keyframes schweben {
+  from { transform: translateY(0); }
+  to { transform: translateY(-22px); }
+}
+svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
