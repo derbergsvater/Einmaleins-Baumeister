@@ -18,3 +18,8 @@ Gemeisterte Zahlenreihen schalten Addons frei.
 - Sprache im UI: Deutsch, kindgerecht, echte Umlaute
 - Keine Tracker, keine externen Requests zur Laufzeit, keine personenbezogenen Daten
 - Aufgaben-/Fortschrittslogik als pure functions halten (testbar ohne Browser)
+- **Nur Multiplikation** (1·1 bis 10·10) — keine Division, kein Scope-Creep
+- **Qualitätsanspruch:** muss Kinder begeistern — Animationen, Sound und
+  Feier-Momente sind Kernfeatures, kein Beiwerk (KONZEPT.md Abschnitt 5)
+- Schwierigkeit immer dynamisch am eigenen Niveau des Kindes, nie absolute
+  Zeitlimits als Bedingung (KONZEPT.md Abschnitt 3.4)
