@@ -131,3 +131,17 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
   cursor: pointer;
 }
 .avatar-option input:checked + span { border-color: var(--tinte); background: var(--gelb); }
+
+/* ===== Hub ===== */
+.kopf-knoepfe { display: flex; gap: 6px; }
+.reihen-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.reihen-knopf { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+.reihen-knopf.gemeistert { background: var(--gelb); }
+.reihe-zahl { font-size: 1.3rem; }
+.balken {
+  flex: 1; height: 14px; max-width: 110px;
+  background: var(--bg-akzent); border: 2px solid var(--tinte); border-radius: 7px;
+  overflow: hidden;
+}
+.balken .fuellung { display: block; height: 100%; background: var(--gruen); transition: width 0.3s ease; }
+.pokal { font-size: 1.3rem; }
