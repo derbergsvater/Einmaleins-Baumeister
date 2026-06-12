@@ -145,3 +145,21 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 }
 .balken .fuellung { display: block; height: 100%; background: var(--gruen); transition: width 0.3s ease; }
 .pokal { font-size: 1.3rem; }
+
+/* ===== Werkstatt ===== */
+.status-zeile { display: flex; align-items: center; gap: 12px; }
+.balken.gross { flex: 1; height: 22px; max-width: none; border-radius: 11px; border-width: 3px; }
+.aufgabe { text-align: center; min-height: 70px; display: flex; align-items: center; justify-content: center; }
+.term { font-size: 2.6rem; font-weight: bold; }
+.eingabe { display: inline-block; min-width: 1.6em; color: var(--blau); }
+.aufgabe.richtig .eingabe { color: var(--gruen); }
+.aufgabe.zeigt-loesung .eingabe { color: var(--rot); }
+@keyframes aufgabe-schuettel {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+.aufgabe.zeigt-loesung { animation: aufgabe-schuettel 0.3s ease-in-out; }
+.reihe-titel { font-size: 1.3rem; font-weight: bold; }
+.combo { font-size: 1.2rem; font-weight: bold; min-width: 3.2em; text-align: right; }
+.pruefung-knopf { background: var(--gelb); }

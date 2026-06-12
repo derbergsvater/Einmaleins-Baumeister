@@ -1,8 +1,9 @@
 import { createStore } from './store/profiles.js';
 import { showStart } from './screens/start.js';
 import { showHub } from './screens/hub.js';
+import { showWerkstatt } from './screens/werkstatt.js';
 
-const screens = { start: showStart, hub: showHub };
+const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt };
 const root = document.getElementById('app');
 const ctx = { store: createStore(window.localStorage) };
 
