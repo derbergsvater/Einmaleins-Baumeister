@@ -175,3 +175,16 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 .ergebnis { align-items: center; justify-content: center; text-align: center; gap: 20px; }
 .gross-text { font-size: 1.25rem; }
 .addon-neu { font-size: 1.15rem; background: var(--gelb); padding: 12px 16px; border-radius: var(--radius); border: 3px solid var(--tinte); }
+
+/* ===== Garage ===== */
+.addon-liste { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.addon-knopf { font-size: 0.95rem; padding: 10px 8px; text-align: left; }
+.addon-knopf.gesperrt { background: var(--bg-akzent); color: var(--grau); border-color: var(--grau); box-shadow: none; cursor: default; }
+.pokal-regal {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+  background: #fff; border: 3px solid var(--tinte); border-radius: var(--radius);
+  padding: 12px;
+}
+.pokal-platz { display: flex; flex-direction: column; align-items: center; opacity: 0.4; }
+.pokal-platz.gewonnen { opacity: 1; }
+.pokal-icon { font-size: 1.5rem; min-height: 1.5em; }
