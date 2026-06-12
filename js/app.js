@@ -2,8 +2,9 @@ import { createStore } from './store/profiles.js';
 import { showStart } from './screens/start.js';
 import { showHub } from './screens/hub.js';
 import { showWerkstatt } from './screens/werkstatt.js';
+import { showPruefung } from './screens/pruefung.js';
 
-const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt };
+const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt, pruefung: showPruefung };
 const root = document.getElementById('app');
 const ctx = { store: createStore(window.localStorage) };
 
