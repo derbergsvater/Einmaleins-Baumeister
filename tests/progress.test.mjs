@@ -36,3 +36,41 @@ test('pruefungBereit erst bei vollem Balken', () => {
   assert.ok(!pruefungBereit(TRAINING_ZIEL - 1));
   assert.ok(pruefungBereit(TRAINING_ZIEL));
 });
+
+import { createExam, evalExam, PRUEFUNG_AUFGABEN } from '../js/engine/progress.js';
+import { taskKey } from '../js/engine/tasks.js';
+
+function lcg(seed = 42) {
+  let s = seed;
+  return () => (s = (s * 1664525 + 1013904223) % 4294967296) / 4294967296;
+}
+
+test('createExam: 12 eindeutige Aufgaben aus der Reihe', () => {
+  const exam = createExam(7, lcg(3));
+  assert.equal(exam.length, PRUEFUNG_AUFGABEN);
+  assert.equal(new Set(exam.map(taskKey)).size, PRUEFUNG_AUFGABEN);
+  assert.ok(exam.every(t => t.a === 7 || t.b === 7));
+});
+
+test('createExam mischt (zwei Seeds, verschiedene Reihenfolge)', () => {
+  const a = createExam(7, lcg(1)).map(taskKey).join(',');
+  const b = createExam(7, lcg(2)).map(taskKey).join(',');
+  assert.notEqual(a, b);
+});
+
+test('evalExam: 0 oder 1 Fehler bestanden, 2 Fehler nicht', () => {
+  const alleRichtig = Array(PRUEFUNG_AUFGABEN).fill(true);
+  assert.deepEqual(evalExam(alleRichtig), { fehler: 0, bestanden: true });
+
+  const einFehler = [...alleRichtig];
+  einFehler[4] = false;
+  assert.deepEqual(evalExam(einFehler), { fehler: 1, bestanden: true });
+
+  const zweiFehler = [...einFehler];
+  zweiFehler[9] = false;
+  assert.deepEqual(evalExam(zweiFehler), { fehler: 2, bestanden: false });
+});
+
+test('evalExam: abgebrochene Prüfung gilt nicht als bestanden', () => {
+  assert.equal(evalExam([true, true, true]).bestanden, false);
+});
