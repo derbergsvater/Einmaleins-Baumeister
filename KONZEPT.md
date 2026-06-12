@@ -153,7 +153,9 @@ Arbeitsblatt mit Buttons.
 - Aufbau Werkstatt-Screen: oben das Bauobjekt (immer sichtbar — die Belohnung vor
   Augen), Mitte die Aufgabe groß („7 · 4 = ?"), unten ein **eigener Ziffernblock**
   (große Touch-Flächen, kein System-Keyboard, kein Zoom-Gehopse).
-- Antwort-Eingabe: Ziffern tippen + Häkchen, oder Auto-Submit bei eindeutiger Stellenzahl.
+- Antwort-Eingabe: Ziffern tippen, **Auto-Submit** sobald die Stellenzahl der Lösung
+  erreicht ist (✓ nur als Fallback). Am PC funktioniert die physische Tastatur
+  (Ziffern, Backspace, Enter).
 - Große Schrift, hoher Kontrast, keine Werbung, keine externen Links — Eltern-tauglich.
 - Kindgerechte Sprache, kurze Texte, Vorlese-Icons sind nicht nötig (Zielgruppe kann lesen).
 

@@ -18,6 +18,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   let lastKey = null;
   let aufgabe = null;
   let gesperrt = false; // blockt Eingaben während Feedback-Animation
+  let numpad = null;
 
   root.innerHTML = `
     <div class="screen werkstatt">
@@ -64,6 +65,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     aufgabe = pickTask({ reihe, stats: profil.aufgabenStats, lastKey, wrongStreak });
     lastKey = taskKey(aufgabe);
     gesperrt = false;
+    numpad?.reset();
     aufgabeEl.classList.remove('richtig', 'zeigt-loesung');
     aufgabeEl.innerHTML = `<span class="term">${aufgabe.a} · ${aufgabe.b} = <span class="eingabe">?</span></span>`;
   }
@@ -114,12 +116,13 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     }
   }
 
-  createNumpad(root.querySelector('.numpad'), {
+  numpad = createNumpad(root.querySelector('.numpad'), {
     onChange: (wert) => {
       if (gesperrt) return;
       aufgabeEl.querySelector('.eingabe').textContent = wert || '?';
     },
     onSubmit: antwort,
+    erwarteteStellen: () => (aufgabe ? String(loesung(aufgabe)).length : 99),
   });
 
   root.querySelector('.zurueck').onclick = () => navigate('hub');

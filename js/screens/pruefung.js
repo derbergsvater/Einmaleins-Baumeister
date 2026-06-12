@@ -66,7 +66,9 @@ export function showPruefung(root, ctx, navigate, { reihe }) {
     onChange: (wert) => {
       aufgabeEl.querySelector('.eingabe').textContent = wert || '?';
     },
+    erwarteteStellen: () => (index < aufgaben.length ? String(loesung(aufgaben[index])).length : 99),
     onSubmit: (wert) => {
+      if (index >= aufgaben.length) return;
       const richtig = Number(wert) === loesung(aufgaben[index]);
       ergebnisse.push(richtig);
       punkte[index].classList.add(richtig ? 'ok' : 'nok');
