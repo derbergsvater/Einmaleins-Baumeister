@@ -1,0 +1,51 @@
+/* ===== Variablen & Reset ===== */
+:root {
+  --bg: #fdf6e3;
+  --bg-akzent: #ffe8c2;
+  --tinte: #1b2432;
+  --rot: #d62828;
+  --gelb: #ffd166;
+  --gruen: #06d6a0;
+  --blau: #118ab2;
+  --grau: #8d99ae;
+  --radius: 18px;
+  --schatten: 0 4px 0 rgba(27, 36, 50, 0.18);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: "Comic Sans MS", "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-akzent) 100%);
+  color: var(--tinte);
+  min-height: 100dvh;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#app { max-width: 560px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; }
+
+/* ===== Screens & Typo ===== */
+.screen { flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 14px; }
+.screen header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+h1 { font-size: 2rem; text-align: center; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.1rem; }
+.slogan { text-align: center; font-size: 1.1rem; }
+
+/* ===== Buttons ===== */
+.btn {
+  font: inherit; font-size: 1.15rem; font-weight: bold;
+  color: var(--tinte); background: #fff;
+  border: 3px solid var(--tinte); border-radius: var(--radius);
+  box-shadow: var(--schatten);
+  padding: 12px 18px; cursor: pointer;
+  transition: transform 0.08s ease-out;
+}
+.btn:active { transform: translateY(3px); box-shadow: none; }
+.btn.gross { font-size: 1.4rem; padding: 16px 24px; background: var(--gelb); }
+.btn.klein { font-size: 1rem; padding: 8px 12px; }
+.verborgen { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
