@@ -65,9 +65,9 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     aufgabe = pickTask({ reihe, stats: profil.aufgabenStats, lastKey, wrongStreak });
     lastKey = taskKey(aufgabe);
     gesperrt = false;
-    numpad?.reset();
     aufgabeEl.classList.remove('richtig', 'zeigt-loesung');
     aufgabeEl.innerHTML = `<span class="term">${aufgabe.a} · ${aufgabe.b} = <span class="eingabe">?</span></span>`;
+    numpad?.reset();
   }
 
   function antwort(wert) {
@@ -119,7 +119,8 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   numpad = createNumpad(root.querySelector('.numpad'), {
     onChange: (wert) => {
       if (gesperrt) return;
-      aufgabeEl.querySelector('.eingabe').textContent = wert || '?';
+      const eingabe = aufgabeEl.querySelector('.eingabe');
+      if (eingabe) eingabe.textContent = wert || '?';
     },
     onSubmit: antwort,
     erwarteteStellen: () => (aufgabe ? String(loesung(aufgabe)).length : 99),

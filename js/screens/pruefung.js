@@ -64,7 +64,8 @@ export function showPruefung(root, ctx, navigate, { reihe }) {
 
   createNumpad(root.querySelector('.numpad'), {
     onChange: (wert) => {
-      aufgabeEl.querySelector('.eingabe').textContent = wert || '?';
+      const eingabe = aufgabeEl.querySelector('.eingabe');
+      if (eingabe) eingabe.textContent = wert || '?';
     },
     erwarteteStellen: () => (index < aufgaben.length ? String(loesung(aufgaben[index])).length : 99),
     onSubmit: (wert) => {
