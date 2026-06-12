@@ -74,3 +74,19 @@ test('evalExam: 0 oder 1 Fehler bestanden, 2 Fehler nicht', () => {
 test('evalExam: abgebrochene Prüfung gilt nicht als bestanden', () => {
   assert.equal(evalExam([true, true, true]).bestanden, false);
 });
+
+import { naechsteReihe } from '../js/engine/progress.js';
+
+test('naechsteReihe: nächste offene Reihe nach der aktuellen, mit Umlauf', () => {
+  assert.equal(naechsteReihe({}, 0), 1);
+  assert.equal(naechsteReihe({ '1': { gemeistert: true } }, 1), 2);
+
+  const fastAlle = {};
+  for (let r = 1; r <= 10; r++) fastAlle[r] = { gemeistert: true };
+  fastAlle['3'] = { gemeistert: false };
+  assert.equal(naechsteReihe(fastAlle, 7), 3, 'Umlauf über 10 hinaus zur offenen 3');
+
+  const alle = {};
+  for (let r = 1; r <= 10; r++) alle[r] = { gemeistert: true };
+  assert.equal(naechsteReihe(alle, 5), null, 'alles gemeistert → null');
+});

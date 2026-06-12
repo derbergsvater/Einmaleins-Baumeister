@@ -1,4 +1,4 @@
-import { TRAINING_ZIEL } from '../engine/progress.js';
+import { TRAINING_ZIEL, naechsteReihe } from '../engine/progress.js';
 import { PARTS, addonsUnlocked } from '../projects/rennwagen.js';
 import { RENNWAGEN_SVG } from '../projects/rennwagen.svg.js';
 import { mountCar, updateCar } from '../ui/carRenderer.js';
@@ -31,12 +31,15 @@ export function showHub(root, ctx, navigate) {
   });
 
   const grid = root.querySelector('.reihen-grid');
+  const empfohlen = naechsteReihe(profil.reihen, 0);
   for (let r = 1; r <= 10; r++) {
     const stand = profil.reihen[r] || { training: 0, gemeistert: false };
     const prozent = Math.min(100, Math.round((100 * stand.training) / TRAINING_ZIEL));
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'btn reihen-knopf' + (stand.gemeistert ? ' gemeistert' : '');
+    btn.className = 'btn reihen-knopf'
+      + (stand.gemeistert ? ' gemeistert' : '')
+      + (r === empfohlen ? ' empfohlen' : '');
     btn.innerHTML = stand.gemeistert
       ? `<span class="reihe-zahl">${r}er</span><span class="pokal">🏆</span>`
       : `<span class="reihe-zahl">${r}er</span><span class="balken"><span class="fuellung" style="width:${prozent}%"></span></span>`;

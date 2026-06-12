@@ -97,6 +97,11 @@ Das Kind wählt beim Start ein Bauprojekt. Jedes Projekt besteht aus ca. **12 Ba
 - **Pokale:** ein Pokal pro gemeisterter Reihe, sichtbar im Pokal-Regal.
 - **Baufortschritt bleibt erhalten:** Das Objekt wird nie zurückgebaut. Wer eine
   Prüfung nicht besteht, verliert nichts.
+- **Sog zur nächsten Reihe:** Nach bestandener Prüfung führt der Hauptknopf direkt
+  zur nächsten offenen Reihe, gemeisterte Reihen zeigen in der Werkstatt einen
+  „Weiter →"-Banner, im Hub pulsiert die empfohlene Reihe. Lob ist allgegenwärtig:
+  schwebende Lob-Texte bei jeder richtigen Antwort, Combo-Feiern, und die
+  Erfolgs-Tonhöhe steigt mit der Serie — es gibt immer ein sichtbares nächstes Ziel.
 - **Projektwechsel möglich:** Gemeisterte Reihen gelten profilweit. Wechselt das Kind
   vom Rennwagen zum Zauberschloss, sind die Addons der bereits gemeisterten Reihen
   dort sofort freigeschaltet — kein Zwang, alles doppelt zu rechnen. Nur der Grundbau

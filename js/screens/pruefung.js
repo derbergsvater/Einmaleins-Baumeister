@@ -1,4 +1,4 @@
-import { createExam, evalExam } from '../engine/progress.js';
+import { createExam, evalExam, naechsteReihe } from '../engine/progress.js';
 import { loesung } from '../engine/tasks.js';
 import { addonFuerReihe } from '../projects/rennwagen.js';
 import { createNumpad } from '../ui/numpad.js';
@@ -41,16 +41,22 @@ export function showPruefung(root, ctx, navigate, { reihe }) {
       const addonText = addon.alleReihen
         ? `Dein Super-Addon <strong>${addon.label}</strong> wartet, sobald alle 10 Reihen gemeistert sind!`
         : `Neues Addon freigeschaltet: <strong>${addon.label}</strong> 🔧`;
+      const naechste = naechsteReihe(profil.reihen, reihe);
       sound.fanfare();
       root.innerHTML = `
         <div class="screen ergebnis">
           <h2>🏆 Gemeistert!</h2>
           <p class="gross-text">Du bist jetzt Meister der ${reihe}er-Reihe!</p>
           <p class="addon-neu">${addonText}</p>
-          <button type="button" class="btn gross weiter">Ab in die Garage! 🏁</button>
+          ${naechste ? '' : '<p class="gross-text">⭐ ALLE 10 Reihen gemeistert — du bist 1x1-MEISTER!</p>'}
+          <button type="button" class="btn gross weiter">${naechste ? `Weiter: ${naechste}er-Reihe! 🔧` : 'Ab in die Garage! 🏁'}</button>
+          ${naechste ? '<button type="button" class="btn ergebnis-garage">🏁 Garage ansehen</button>' : ''}
         </div>`;
       feuerKonfetti(root);
-      root.querySelector('.weiter').onclick = () => navigate('garage');
+      root.querySelector('.weiter').onclick = () =>
+        naechste ? navigate('werkstatt', { reihe: naechste }) : navigate('garage');
+      const garageBtn = root.querySelector('.ergebnis-garage');
+      if (garageBtn) garageBtn.onclick = () => navigate('garage');
     } else {
       root.innerHTML = `
         <div class="screen ergebnis">

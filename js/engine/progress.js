@@ -36,6 +36,15 @@ export function createExam(reihe, rng = Math.random) {
   return pool.slice(0, PRUEFUNG_AUFGABEN);
 }
 
+// Nächste nicht gemeisterte Reihe ab der aktuellen (mit Umlauf), null wenn alle fertig
+export function naechsteReihe(reihen, abReihe = 0) {
+  for (let schritt = 1; schritt <= 10; schritt++) {
+    const r = ((abReihe - 1 + schritt + 10) % 10) + 1;
+    if (!(reihen[r] && reihen[r].gemeistert)) return r;
+  }
+  return null;
+}
+
 export function evalExam(ergebnisse) {
   const fehler = ergebnisse.filter(ok => !ok).length;
   return {

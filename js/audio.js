@@ -53,7 +53,13 @@ function createAudio() {
 
   return {
     klick() { ton(900, 0.04, 'square', 0, 0.06); },
-    richtig() { ton(660, 0.12, 'sine', 0, 0.3); ton(880, 0.25, 'sine', 0.1, 0.25); },
+    // Tonhöhe steigt mit der Serie (1 Halbton pro richtiger Antwort, gedeckelt bei +12)
+    richtig(streak = 0) {
+      const faktor = Math.pow(2, Math.min(streak, 12) / 12);
+      ton(660 * faktor, 0.12, 'sine', 0, 0.3);
+      ton(880 * faktor, 0.25, 'sine', 0.1, 0.25);
+    },
+    combo() { [784, 988, 1175].forEach((f, i) => ton(f, 0.12, 'square', i * 0.07, 0.15)); },
     falsch() { ton(180, 0.35, 'triangle', 0, 0.2); },
     montage() {
       // Dreimal Ratsche, dann ein heller "sitzt!"-Klang
