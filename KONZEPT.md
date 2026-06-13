@@ -50,8 +50,20 @@ Aufgabe lösen → richtig? → Bauteil wird sichtbar montiert (Animation + Soun
 
 ### 3.1 Bauprojekte (Themen)
 
-Das Kind wählt beim Start ein Bauprojekt. Jedes Projekt besteht aus ca. **12 Bauteilen**
-(Grundbau) und **10 Addons** (eines pro gemeisterter Zahlenreihe).
+Das Kind wählt beim Start auf einem eigenen **Projektwahl-Screen**, *was* beim Rechnen
+entsteht — und kann später jederzeit über den Hub wechseln. Technisch liegt hinter
+jedem Projekt ein **Descriptor** mit einheitlicher Schnittstelle (`projects/registry.js`);
+die Screens kennen nur diese Schnittstelle, nie ein konkretes Projekt. Zwei Projekte
+sind umgesetzt, sie nutzen **dieselben** Reihen-Trainings-/Meister-Daten:
+
+- **Rennwagen** (Einzelobjekt): ca. **12 Bauteile** (Grundbau, füllt sich über alle
+  Reihen) + **10 Addons** (eines pro gemeisterter Reihe), die man selbst in der Garage
+  anbaut.
+- **Tierfamilie / Eierfarm** (Sammlung): pro Zahlenreihe ein **Ei**, das mit jeder
+  richtigen Antwort mehr **Risse** bekommt; die bestandene Meisterprüfung macht es
+  schlüpfbereit, im **Tier-Stall** tippt das Kind das Ei zum **Schlüpfen** an (Tier
+  der Familie: Küken → … → Drache). Eine **fehlerfreie** Prüfung (0 Fehler) verdient
+  **Zubehör** fürs Tier (🎀). Am Ende: eine ganze Tierfamilie.
 
 | Projekt | Grundbau (Beispiele) | Addons (Beispiele) |
 |---------|---------------------|--------------------|
