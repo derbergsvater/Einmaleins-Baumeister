@@ -5,6 +5,11 @@ export function taskKey(t) {
   return `${t.a}x${t.b}`;
 }
 
+// Richtungsunabhängiger Schlüssel: 5·1 und 1·5 ergeben denselben → zur Wiederholungs-Vermeidung
+export function normKey(t) {
+  return `${Math.min(t.a, t.b)}x${Math.max(t.a, t.b)}`;
+}
+
 export function loesung(t) {
   return t.a * t.b;
 }
@@ -45,7 +50,8 @@ export function gewicht(s) {
   return 1 + 2 * s.falsch;
 }
 
-export function pickTask({ reihe, stats = {}, lastKey = null, wrongStreak = 0 }, rng = Math.random) {
+// letzte: Liste der zuletzt gestellten normKeys (jüngste zuerst) — diese werden gemieden
+export function pickTask({ reihe, stats = {}, letzte = [], wrongStreak = 0 }, rng = Math.random) {
   const pool = buildPool(reihe);
   let kandidaten = pool;
 
@@ -61,8 +67,18 @@ export function pickTask({ reihe, stats = {}, lastKey = null, wrongStreak = 0 },
     kandidaten = sichere.length ? sichere : pool.filter(t => istAnker(t, reihe));
   }
 
-  const ohneWiederholung = kandidaten.filter(t => taskKey(t) !== lastKey);
-  if (ohneWiederholung.length) kandidaten = ohneWiederholung;
+  // Aufgaben aus der jüngsten Vergangenheit meiden — aber nie alle Kandidaten wegfiltern.
+  // Schrittweise lockern, bis genug Auswahl bleibt (mind. die Hälfte des Pools, mind. 2).
+  const minAuswahl = Math.max(2, Math.ceil(kandidaten.length / 2));
+  let tabu = letzte.slice();
+  let frisch = kandidaten;
+  while (tabu.length) {
+    const vermeiden = new Set(tabu);
+    const gefiltert = kandidaten.filter(t => !vermeiden.has(normKey(t)));
+    if (gefiltert.length >= Math.min(minAuswahl, kandidaten.length)) { frisch = gefiltert; break; }
+    tabu = tabu.slice(0, -1); // älteste Sperre fallen lassen und erneut versuchen
+  }
+  kandidaten = frisch;
 
   const gewichte = kandidaten.map(t => gewicht(stat(stats, t)));
   const summe = gewichte.reduce((a, b) => a + b, 0);

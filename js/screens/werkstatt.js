@@ -1,4 +1,4 @@
-import { pickTask, taskKey, loesung } from '../engine/tasks.js';
+import { pickTask, taskKey, normKey, loesung } from '../engine/tasks.js';
 import { applyAnswer, pruefungBereit, TRAINING_ZIEL, comboStufe, naechsteReihe } from '../engine/progress.js';
 import { PARTS, addonFuerReihe } from '../projects/rennwagen.js';
 import { RENNWAGEN_SVG } from '../projects/rennwagen.svg.js';
@@ -16,7 +16,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
 
   let streak = 0;
   let wrongStreak = 0;
-  let lastKey = null;
+  let letzte = [];
   let aufgabe = null;
   let gesperrt = false; // blockt Eingaben während Feedback-Animation
   let numpad = null;
@@ -81,8 +81,8 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   }
 
   function naechsteAufgabe() {
-    aufgabe = pickTask({ reihe, stats: profil.aufgabenStats, lastKey, wrongStreak });
-    lastKey = taskKey(aufgabe);
+    aufgabe = pickTask({ reihe, stats: profil.aufgabenStats, letzte, wrongStreak });
+    letzte = [normKey(aufgabe), ...letzte].slice(0, 3);
     gesperrt = false;
     aufgabeEl.classList.remove('richtig', 'zeigt-loesung');
     aufgabeEl.innerHTML = `<span class="term">${aufgabe.a} · ${aufgabe.b} = <span class="eingabe">?</span></span>`;

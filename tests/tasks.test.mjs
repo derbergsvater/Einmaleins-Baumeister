@@ -24,7 +24,7 @@ test('istAnker erkennt 1, 2, 5, 10 als leichten Partner-Faktor', () => {
   assert.ok(!istAnker({ a: 7, b: 4 }, 4));
 });
 
-import { pickTask, gewicht, totalRichtig, ANKER_PHASE_BIS } from '../js/engine/tasks.js';
+import { pickTask, gewicht, totalRichtig, ANKER_PHASE_BIS, normKey } from '../js/engine/tasks.js';
 
 // Deterministischer Pseudo-Zufall für Tests (LCG)
 function lcg(seed = 42) {
@@ -35,7 +35,7 @@ function lcg(seed = 42) {
 test('Anker-Phase: ohne Erfahrung kommen nur Anker-Aufgaben', () => {
   const rng = lcg(1);
   for (let i = 0; i < 50; i++) {
-    const t = pickTask({ reihe: 4, stats: {}, lastKey: null, wrongStreak: 0 }, rng);
+    const t = pickTask({ reihe: 4, stats: {}, letzte: [], wrongStreak: 0 }, rng);
     assert.ok(istAnker(t, 4), `Nicht-Anker in Anker-Phase: ${taskKey(t)}`);
   }
 });
@@ -46,7 +46,7 @@ test('nach der Anker-Phase kommen auch schwere Aufgaben', () => {
   const rng = lcg(7);
   const gesehen = new Set();
   for (let i = 0; i < 200; i++) {
-    gesehen.add(taskKey(pickTask({ reihe: 4, stats, lastKey: null, wrongStreak: 0 }, rng)));
+    gesehen.add(taskKey(pickTask({ reihe: 4, stats, letzte: [], wrongStreak: 0 }, rng)));
   }
   assert.ok([...gesehen].some(k => k.includes('7') || k.includes('8')), 'nur leichte Aufgaben');
 });
@@ -63,7 +63,7 @@ test('schwache Aufgaben kommen statistisch häufiger', () => {
   const rng = lcg(99);
   let schwach = 0, sicher = 0;
   for (let i = 0; i < 600; i++) {
-    const k = taskKey(pickTask({ reihe: 4, stats, lastKey: null, wrongStreak: 0 }, rng));
+    const k = taskKey(pickTask({ reihe: 4, stats, letzte: [], wrongStreak: 0 }, rng));
     if (k === '4x7') schwach++;
     if (k === '4x1') sicher++;
   }
@@ -79,16 +79,33 @@ test('Frust-Bremse: nach 3 Fehlern kommen sichere Aufgaben', () => {
   };
   const rng = lcg(5);
   for (let i = 0; i < 50; i++) {
-    const k = taskKey(pickTask({ reihe: 4, stats, lastKey: null, wrongStreak: 3 }, rng));
+    const k = taskKey(pickTask({ reihe: 4, stats, letzte: [], wrongStreak: 3 }, rng));
     assert.ok(['4x3', '4x6'].includes(k), `unsichere Aufgabe trotz Frust-Bremse: ${k}`);
   }
 });
 
-test('keine direkte Wiederholung derselben Aufgabe', () => {
+test('vermeidet zuletzt gestellte Aufgaben (auch Tauschaufgaben 5·1 = 1·5)', () => {
   const stats = { '4x1': { richtig: 10, falsch: 0 } };
   const rng = lcg(13);
   for (let i = 0; i < 50; i++) {
-    const t = pickTask({ reihe: 4, stats, lastKey: '4x5', wrongStreak: 0 }, rng);
-    assert.notEqual(taskKey(t), '4x5');
+    const t = pickTask({ reihe: 4, stats, letzte: ['1x4'], wrongStreak: 0 }, rng);
+    assert.notEqual(normKey(t), '1x4', `4·1/1·4 trotz Tabu: ${taskKey(t)}`);
   }
+});
+
+test('keine Wiederholung innerhalb der letzten 3 Aufgaben (laufende Auswahl)', () => {
+  const rng = lcg(123);
+  // Reihe ohne Anker-Phasen-Einschränkung, damit der Pool groß genug ist
+  const stats = {};
+  for (let n = 1; n <= 10; n++) stats[`4x${n}`] = { richtig: 1, falsch: 0 };
+  let letzte = [];
+  const verlauf = [];
+  for (let i = 0; i < 60; i++) {
+    const t = pickTask({ reihe: 4, stats, letzte, wrongStreak: 0 }, rng);
+    const k = normKey(t);
+    assert.ok(!letzte.includes(k), `Wiederholung in Fenster: ${k} nach [${letzte}]`);
+    verlauf.push(k);
+    letzte = [k, ...letzte].slice(0, 3);
+  }
+  assert.ok(new Set(verlauf).size >= 6, 'zu wenig Abwechslung insgesamt');
 });
