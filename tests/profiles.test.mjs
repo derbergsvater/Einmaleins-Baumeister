@@ -16,7 +16,7 @@ test('create legt Profil an und setzt es aktiv', () => {
   assert.equal(profil.name, 'Ella');
   assert.equal(profil.avatar, '🦄');
   assert.equal(profil.aktivesProjekt, 'rennwagen');
-  assert.deepEqual(profil.projekte, { rennwagen: { grundbau: 0 } });
+  assert.deepEqual(profil.projekte, { rennwagen: { grundbau: 0, montierteAddons: [] } });
   assert.equal(store.getActive().id, profil.id);
 });
 
@@ -55,4 +55,29 @@ test('zwei Profile mit gleichem Namen bekommen verschiedene IDs', () => {
   const b = store.create('Tom', '🚀');
   assert.notEqual(a.id, b.id);
   assert.equal(store.list().length, 2);
+});
+
+test('neues Profil startet mit leerer Montage-Liste', () => {
+  const store = createStore(fakeStorage());
+  const profil = store.create('Lea', '⭐');
+  assert.deepEqual(profil.projekte.rennwagen.montierteAddons, []);
+});
+
+test('Migration: altes Profil ohne montierteAddons wird ergänzt', () => {
+  const alt = {
+    profiles: {
+      p1_alt: {
+        id: 'p1_alt', name: 'Alt', avatar: '🦊',
+        aktivesProjekt: 'rennwagen',
+        reihen: { '3': { training: 20, gemeistert: true } },
+        aufgabenStats: {},
+        projekte: { rennwagen: { grundbau: 5 } },
+      },
+    },
+    activeId: 'p1_alt',
+  };
+  const store = createStore(fakeStorage({ 'baumeister.v1': JSON.stringify(alt) }));
+  const profil = store.getActive();
+  assert.deepEqual(profil.projekte.rennwagen.montierteAddons, []);
+  assert.equal(profil.projekte.rennwagen.grundbau, 5, 'bestehende Werte bleiben erhalten');
 });

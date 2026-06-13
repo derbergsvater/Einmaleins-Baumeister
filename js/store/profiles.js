@@ -1,13 +1,27 @@
 // Profil-Store auf localStorage. Storage ist injizierbar (Tests nutzen einen Fake).
 const KEY = 'baumeister.v1';
 
+// Sorgt dafür, dass ältere Profile alle erwarteten Felder haben (sanfte Migration).
+function normalisiere(profil) {
+  profil.reihen ||= {};
+  profil.aufgabenStats ||= {};
+  profil.projekte ||= {};
+  const rw = (profil.projekte.rennwagen ||= { grundbau: 0 });
+  rw.grundbau ||= 0;
+  rw.montierteAddons ||= [];
+  return profil;
+}
+
 export function createStore(storage) {
   function lesen() {
+    let daten;
     try {
-      return JSON.parse(storage.getItem(KEY)) || { profiles: {}, activeId: null };
+      daten = JSON.parse(storage.getItem(KEY)) || { profiles: {}, activeId: null };
     } catch {
-      return { profiles: {}, activeId: null };
+      daten = { profiles: {}, activeId: null };
     }
+    for (const profil of Object.values(daten.profiles)) normalisiere(profil);
+    return daten;
   }
   function schreiben(daten) {
     storage.setItem(KEY, JSON.stringify(daten));
@@ -30,7 +44,7 @@ export function createStore(storage) {
         aktivesProjekt: 'rennwagen',
         reihen: {},
         aufgabenStats: {},
-        projekte: { rennwagen: { grundbau: 0 } },
+        projekte: { rennwagen: { grundbau: 0, montierteAddons: [] } },
       };
       daten.profiles[id] = profil;
       daten.activeId = id;
