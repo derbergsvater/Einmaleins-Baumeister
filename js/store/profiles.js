@@ -3,12 +3,16 @@ const KEY = 'baumeister.v1';
 
 // Sorgt dafür, dass ältere Profile alle erwarteten Felder haben (sanfte Migration).
 function normalisiere(profil) {
+  profil.aktivesProjekt ||= 'rennwagen';
   profil.reihen ||= {};
   profil.aufgabenStats ||= {};
   profil.projekte ||= {};
   const rw = (profil.projekte.rennwagen ||= { grundbau: 0 });
   rw.grundbau ||= 0;
   rw.montierteAddons ||= [];
+  const ef = (profil.projekte.eierfarm ||= {});
+  ef.geschluepft ||= {};
+  ef.accessoires ||= {};
   return profil;
 }
 
@@ -44,7 +48,10 @@ export function createStore(storage) {
         aktivesProjekt: 'rennwagen',
         reihen: {},
         aufgabenStats: {},
-        projekte: { rennwagen: { grundbau: 0, montierteAddons: [] } },
+        projekte: {
+          rennwagen: { grundbau: 0, montierteAddons: [] },
+          eierfarm: { geschluepft: {}, accessoires: {} },
+        },
       };
       daten.profiles[id] = profil;
       daten.activeId = id;

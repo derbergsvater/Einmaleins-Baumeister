@@ -50,6 +50,10 @@ h3 { font-size: 1.1rem; }
   * { animation: none !important; transition: none !important; }
 }
 
+/* ===== Projekt-Bühne (Container je Projekt) ===== */
+.projekt-buehne { width: 100%; position: relative; }
+.projekt-buehne.klein { max-width: 340px; margin: 0 auto; }
+
 /* ===== Auto-Bühne & SVG ===== */
 .auto-buehne { width: 100%; position: relative; }
 .auto-buehne svg { width: 100%; height: auto; display: block; }
@@ -180,8 +184,8 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 
 /* ===== Hub ===== */
 .kopf-knoepfe { display: flex; gap: 6px; }
-.zur-garage { position: relative; }
-.zur-garage.hat-neues { animation: empfohlen-puls 1.4s ease-out infinite; }
+.zur-sammlung { position: relative; }
+.zur-sammlung.hat-neues { animation: empfohlen-puls 1.4s ease-out infinite; }
 .badge {
   position: absolute; top: -7px; right: -7px;
   background: var(--rot); color: #fff; border: 2px solid #fff;
@@ -283,3 +287,56 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 .pokal-platz { display: flex; flex-direction: column; align-items: center; opacity: 0.4; }
 .pokal-platz.gewonnen { opacity: 1; }
 .pokal-icon { font-size: 1.5rem; min-height: 1.5em; }
+
+/* ===== Projektwahl ===== */
+.projekt-karten { display: flex; flex-direction: column; gap: 14px; }
+.projekt-karte {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;
+  font: inherit; background: #fff; color: var(--tinte);
+  border: 3px solid var(--tinte); border-radius: var(--radius); box-shadow: var(--schatten);
+  padding: 20px; cursor: pointer; transition: transform 0.08s ease-out;
+}
+.projekt-karte:active { transform: translateY(3px); box-shadow: none; }
+.projekt-karte.aktiv { background: var(--gelb); }
+.karte-emoji { font-size: 3.2rem; }
+.karte-name { font-size: 1.5rem; font-weight: bold; }
+.karte-slogan { font-size: 0.95rem; color: var(--grau); }
+.projekt-wechsel { align-self: center; }
+
+/* ===== Eierfarm: Ei in der Werkstatt ===== */
+.ei-szene { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; }
+.ei { width: 120px; height: auto; display: block; }
+@keyframes ei-knack { 0% { transform: scale(1); } 40% { transform: scale(1.07) rotate(-2deg); } 100% { transform: scale(1); } }
+.ei.knackt { animation: ei-knack 0.3s ease-out; transform-origin: center bottom; }
+@keyframes ei-zittern { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+.ei.schlupfbereit { animation: ei-zittern 0.5s ease-in-out infinite; transform-origin: center bottom; }
+@keyframes ei-fehler { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+.ei.ei-wackelt { animation: ei-fehler 0.3s ease-in-out; }
+
+/* ===== Eierfarm: geschlüpftes Tier ===== */
+.tier-szene { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; gap: 6px; }
+.tier-emoji { font-size: 5rem; position: relative; display: inline-block; animation: tier-hops 0.7s ease-out; }
+@keyframes tier-hops { 0% { transform: scale(0.3); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.tier-acc { position: absolute; top: -8px; right: -14px; font-size: 2rem; }
+.tier-name { font-weight: bold; font-size: 1.2rem; }
+
+/* ===== Eierfarm: Gewinn-Vorschau ===== */
+.gewinn-ei { position: relative; }
+@keyframes peek-glow { 0%, 100% { filter: drop-shadow(0 0 3px #ffd166); } 50% { filter: drop-shadow(0 0 13px #ffd166); } }
+.schlupf-peek { position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%); font-size: 2.6rem; animation: peek-glow 1s ease-in-out infinite; }
+
+/* ===== Eierfarm: Tier-Stall (Familie) ===== */
+.stall-hinweis { text-align: center; font-size: 0.95rem; }
+.familie-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.familie-zelle {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: #fff; border: 3px solid var(--tinte); border-radius: var(--radius); padding: 8px 2px;
+}
+.zelle-inhalt { font-size: 2rem; position: relative; min-height: 1.4em; }
+.mini-acc { position: absolute; top: -10px; right: -12px; font-size: 0.95rem; }
+.familie-zelle.ei-locked { opacity: 0.45; }
+.familie-zelle.tier { background: var(--gelb); }
+.familie-zelle.schlupfbereit { border-color: #ff9f1c; cursor: pointer; animation: neu-puls 1.3s ease-out infinite; }
+
+/* ===== Ergebnis: Bonus ===== */
+.bonus-text { color: var(--rot); font-weight: bold; font-size: 1.1rem; }

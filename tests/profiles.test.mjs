@@ -16,7 +16,8 @@ test('create legt Profil an und setzt es aktiv', () => {
   assert.equal(profil.name, 'Ella');
   assert.equal(profil.avatar, '🦄');
   assert.equal(profil.aktivesProjekt, 'rennwagen');
-  assert.deepEqual(profil.projekte, { rennwagen: { grundbau: 0, montierteAddons: [] } });
+  assert.deepEqual(profil.projekte.rennwagen, { grundbau: 0, montierteAddons: [] });
+  assert.deepEqual(profil.projekte.eierfarm, { geschluepft: {}, accessoires: {} });
   assert.equal(store.getActive().id, profil.id);
 });
 

@@ -1,15 +1,12 @@
 import { TRAINING_ZIEL, naechsteReihe } from '../engine/progress.js';
-import { PARTS, addonsUnlocked } from '../projects/rennwagen.js';
-import { RENNWAGEN_SVG } from '../projects/rennwagen.svg.js';
-import { mountCar, updateCar } from '../ui/carRenderer.js';
+import { getProjekt } from '../projects/registry.js';
 import { sound } from '../audio.js';
 
 export function showHub(root, ctx, navigate) {
   const profil = ctx.store.getActive();
   if (!profil) { navigate('start'); return; }
-
-  const montiert = profil.projekte.rennwagen.montierteAddons;
-  const offeneAddons = addonsUnlocked(profil.reihen).filter(id => !montiert.includes(id));
+  const projekt = getProjekt(profil.aktivesProjekt);
+  const offene = projekt.offeneBelohnungen(profil);
 
   root.innerHTML = `
     <div class="screen hub">
@@ -18,20 +15,17 @@ export function showHub(root, ctx, navigate) {
         <h2>${profil.avatar} ${profil.name}</h2>
         <div class="kopf-knoepfe">
           <button type="button" class="btn klein stumm">${sound.istStumm() ? '🔇' : '🔊'}</button>
-          <button type="button" class="btn klein zur-garage${offeneAddons.length ? ' hat-neues' : ''}">🏁${offeneAddons.length ? `<span class="badge">${offeneAddons.length}</span>` : ''}</button>
+          <button type="button" class="btn klein zur-sammlung${offene ? ' hat-neues' : ''}">${projekt.sammlungIcon}${offene ? `<span class="badge">${offene}</span>` : ''}</button>
         </div>
       </header>
-      <div class="auto-buehne klein"></div>
+      <div class="projekt-buehne klein"></div>
+      <button type="button" class="btn klein projekt-wechsel">${projekt.emoji} ${projekt.name} ⇄</button>
       <h3>Wähle deine Reihe:</h3>
       <div class="reihen-grid"></div>
     </div>`;
 
-  const buehne = root.querySelector('.auto-buehne');
-  mountCar(buehne, RENNWAGEN_SVG);
-  updateCar(buehne, {
-    teile: PARTS.slice(0, profil.projekte.rennwagen.grundbau).map(p => p.id),
-    addons: profil.projekte.rennwagen.montierteAddons,
-  });
+  const buehne = root.querySelector('.projekt-buehne');
+  projekt.zeichneVorschau(buehne, profil);
 
   const grid = root.querySelector('.reihen-grid');
   const empfohlen = naechsteReihe(profil.reihen, 0);
@@ -51,7 +45,8 @@ export function showHub(root, ctx, navigate) {
   }
 
   root.querySelector('.profil-wechsel').onclick = () => navigate('start');
-  root.querySelector('.zur-garage').onclick = () => navigate('garage');
+  root.querySelector('.projekt-wechsel').onclick = () => navigate('projektwahl');
+  root.querySelector('.zur-sammlung').onclick = () => navigate('garage');
   root.querySelector('.stumm').onclick = (e) => {
     e.target.textContent = sound.toggleStumm() ? '🔇' : '🔊';
   };

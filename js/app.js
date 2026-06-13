@@ -1,11 +1,19 @@
 import { createStore } from './store/profiles.js';
 import { showStart } from './screens/start.js';
+import { showProjektwahl } from './screens/projektwahl.js';
 import { showHub } from './screens/hub.js';
 import { showWerkstatt } from './screens/werkstatt.js';
 import { showPruefung } from './screens/pruefung.js';
 import { showGarage } from './screens/garage.js';
 
-const screens = { start: showStart, hub: showHub, werkstatt: showWerkstatt, pruefung: showPruefung, garage: showGarage };
+const screens = {
+  start: showStart,
+  projektwahl: showProjektwahl,
+  hub: showHub,
+  werkstatt: showWerkstatt,
+  pruefung: showPruefung,
+  garage: showGarage,
+};
 const root = document.getElementById('app');
 const ctx = { store: createStore(window.localStorage) };
 

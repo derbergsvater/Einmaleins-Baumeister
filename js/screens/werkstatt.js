@@ -1,8 +1,6 @@
 import { pickTask, taskKey, normKey, loesung } from '../engine/tasks.js';
 import { applyAnswer, pruefungBereit, TRAINING_ZIEL, comboStufe, naechsteReihe } from '../engine/progress.js';
-import { PARTS, addonFuerReihe } from '../projects/rennwagen.js';
-import { RENNWAGEN_SVG } from '../projects/rennwagen.svg.js';
-import { mountCar, updateCar, montiere, zeigeVorschau, wackel, warneTeil } from '../ui/carRenderer.js';
+import { getProjekt } from '../projects/registry.js';
 import { createNumpad } from '../ui/numpad.js';
 import { createSchrauber } from '../ui/schrauber.js';
 import { sound } from '../audio.js';
@@ -10,17 +8,17 @@ import { sound } from '../audio.js';
 export function showWerkstatt(root, ctx, navigate, { reihe }) {
   const profil = ctx.store.getActive();
   if (!profil) { navigate('start'); return; }
+  const projekt = getProjekt(profil.aktivesProjekt);
   if (!profil.reihen[reihe]) profil.reihen[reihe] = { training: 0, gemeistert: false };
   const stand = profil.reihen[reihe];
-  const bau = profil.projekte.rennwagen;
+  const naechsteOffene = naechsteReihe(profil.reihen, reihe);
 
   let streak = 0;
   let wrongStreak = 0;
   let letzte = [];
   let aufgabe = null;
-  let gesperrt = false; // blockt Eingaben während Feedback-Animation
+  let gesperrt = false;
   let numpad = null;
-  const naechsteOffene = naechsteReihe(profil.reihen, reihe);
 
   root.innerHTML = `
     <div class="screen werkstatt">
@@ -29,7 +27,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
         <span class="reihe-titel">${reihe}er-Reihe</span>
         <span class="combo"></span>
       </header>
-      <div class="auto-buehne"></div>
+      <div class="projekt-buehne"></div>
       ${stand.gemeistert ? `
       <div class="gemeistert-banner">
         <span>🏆 Schon gemeistert!</span>
@@ -46,31 +44,14 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       <div class="numpad"></div>
     </div>`;
 
-  const buehne = root.querySelector('.auto-buehne');
-  mountCar(buehne, RENNWAGEN_SVG);
+  const buehne = root.querySelector('.projekt-buehne');
+  projekt.mountBuehne(buehne);
   const schrauber = createSchrauber(root.querySelector('.schrauber-ecke'));
   const aufgabeEl = root.querySelector('.aufgabe');
   const comboEl = root.querySelector('.combo');
   const fuellungEl = root.querySelector('.balken .fuellung');
   const pruefungBtn = root.querySelector('.pruefung-knopf');
 
-  function zeichneAuto() {
-    updateCar(buehne, {
-      teile: PARTS.slice(0, bau.grundbau).map(p => p.id),
-      addons: bau.montierteAddons,
-    });
-  }
-
-  function zeichneStatus() {
-    fuellungEl.style.width = `${Math.min(100, Math.round((100 * stand.training) / TRAINING_ZIEL))}%`;
-    const stufe = comboStufe(streak);
-    comboEl.textContent = stufe > 1 ? `🔥 x${stufe}` : '';
-    pruefungBtn.classList.toggle('verborgen', !pruefungBereit(stand.training) || stand.gemeistert);
-    const addon = addonFuerReihe(reihe);
-    if (addon && !stand.gemeistert) zeigeVorschau(buehne, addon.id, stand.training / TRAINING_ZIEL);
-  }
-
-  // Schwebender Lob-Text über dem Auto (räumt sich selbst auf)
   function zeigeLob(text, klasse = '') {
     const lob = document.createElement('span');
     lob.className = `lob ${klasse}`;
@@ -78,6 +59,13 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     lob.style.left = `calc(50% + ${Math.round((Math.random() - 0.5) * 60)}px)`;
     buehne.appendChild(lob);
     lob.addEventListener('animationend', () => lob.remove());
+  }
+
+  function zeichneStatus() {
+    fuellungEl.style.width = `${Math.min(100, Math.round((100 * stand.training) / TRAINING_ZIEL))}%`;
+    const stufe = comboStufe(streak);
+    comboEl.textContent = stufe > 1 ? `🔥 x${stufe}` : '';
+    pruefungBtn.classList.toggle('verborgen', !pruefungBereit(stand.training) || stand.gemeistert);
   }
 
   function naechsteAufgabe() {
@@ -109,18 +97,11 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       aufgabeEl.classList.add('richtig');
       navigator.vibrate?.(30);
 
-      if (bau.grundbau < PARTS.length) {
-        bau.grundbau++;
-        zeichneAuto();
-        montiere(buehne, PARTS[bau.grundbau - 1].id);
-        zeigeLob(`${PARTS[bau.grundbau - 1].label} montiert! 🔧`);
-        sound.montage();
-        schrauber.setMood('jubel');
-      } else {
-        sound.richtig(streak);
-        wackel(buehne);
-        zeigeLob(`+${neu.punkte}`);
-      }
+      const res = projekt.beiRichtig(buehne, profil, reihe, { punkte: neu.punkte, streak }) || {};
+      if (res.gebaut) schrauber.setMood('jubel');
+      else sound.richtig(streak);
+      zeigeLob(res.lob || `+${neu.punkte}`);
+
       if (stufeJetzt > stufeVorher) {
         zeigeLob(`🔥 COMBO x${stufeJetzt}!`, 'mega');
         sound.combo();
@@ -139,13 +120,8 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       wrongStreak++;
       sound.falsch();
       schrauber.setMood('trost');
-      // Androhung des Verlusts: zuletzt gebautes Teil (oder Addon) blinkt bedrohlich
-      const warnId = bau.montierteAddons.at(-1)
-        || (bau.grundbau > 0 ? PARTS[bau.grundbau - 1].id : null);
-      if (warnId) {
-        warneTeil(buehne, warnId);
-        zeigeLob('Festhalten! 🔧', 'warn');
-      }
+      projekt.beiFalsch(buehne, profil, reihe);
+      zeigeLob('Festhalten! 🔧', 'warn');
       aufgabeEl.querySelector('.eingabe').textContent = loesung(aufgabe);
       aufgabeEl.classList.add('zeigt-loesung');
       ctx.store.update(profil);
@@ -169,7 +145,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   const weiterBtn = root.querySelector('.weiter-reihe');
   if (weiterBtn) weiterBtn.onclick = () => navigate('werkstatt', { reihe: naechsteOffene });
 
-  zeichneAuto();
+  projekt.zeichne(buehne, profil, reihe);
   zeichneStatus();
   naechsteAufgabe();
 }

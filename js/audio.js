@@ -60,6 +60,12 @@ function createAudio() {
       ton(880 * faktor, 0.25, 'sine', 0.1, 0.25);
     },
     combo() { [784, 988, 1175].forEach((f, i) => ton(f, 0.12, 'square', i * 0.07, 0.15)); },
+    // Eierknacken: kurzer Knackser (Holz/Schale) + Tick
+    knack() {
+      rauschen(0.03, 0, 0.3, 1200);
+      ton(300, 0.08, 'triangle', 0.02, 0.18);
+      rauschen(0.03, 0.06, 0.22, 900);
+    },
     // Luftdruckschrauber: schnelle Ratterstöße + abfallender Zischer (Garage-Montage)
     luftschrauber() {
       for (let i = 0; i < 5; i++) rauschen(0.04, i * 0.05, 0.35, 2400);

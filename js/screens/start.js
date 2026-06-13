@@ -43,6 +43,6 @@ export function showStart(root, ctx, navigate) {
     const name = String(daten.get('name') || '').trim();
     if (!name) return;
     ctx.store.create(name, daten.get('avatar'));
-    navigate('hub');
+    navigate('projektwahl');
   };
 }
