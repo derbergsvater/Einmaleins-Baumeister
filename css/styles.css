@@ -219,6 +219,15 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 .pruefung-knopf { background: var(--gelb); }
 
 /* ===== Prüfung & Ergebnis ===== */
+.gewinn-vorschau { text-align: center; }
+.gewinn-buehne { max-width: 240px; }
+.gewinn-text { font-weight: bold; font-size: 1.05rem; }
+@keyframes gewinn-puls {
+  0%, 100% { filter: drop-shadow(0 0 2px #ffd166); }
+  50% { filter: drop-shadow(0 0 11px #ffd166) brightness(1.3); }
+}
+.gewinn-glanz { opacity: 1 !important; animation: gewinn-puls 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.weiter-reihe-btn { margin-top: 4px; }
 .punkte { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
 .punkt {
   width: 18px; height: 18px; border-radius: 50%;
