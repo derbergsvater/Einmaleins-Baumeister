@@ -3,6 +3,25 @@
 // erwarteteStellen(): Stellenzahl der Lösung → Auto-Submit, sobald erreicht.
 import { sound } from '../audio.js';
 
+// Genau EIN globaler Tastatur-Listener für die ganze App. Tasten gehen immer nur an
+// den zuletzt erstellten, noch sichtbaren Ziffernblock — kein Stör-Stacking bei
+// Screen-Wechseln (z. B. Werkstatt → Meisterprüfung).
+let aktiv = null;
+let globalRegistriert = false;
+
+function ensureGlobalKey() {
+  if (globalRegistriert) return;
+  globalRegistriert = true;
+  document.addEventListener('keydown', (e) => {
+    if (!aktiv || !aktiv.el || !aktiv.el.isConnected) return;
+    if (e.key >= '0' && e.key <= '9') aktiv.ziffer(e.key);
+    else if (e.key === 'Backspace') aktiv.loeschen();
+    else if (e.key === 'Enter') aktiv.abschicken();
+    else return;
+    e.preventDefault();
+  });
+}
+
 export function createNumpad(el, { onChange, onSubmit, erwarteteStellen = null }) {
   let wert = '';
 
@@ -44,20 +63,9 @@ export function createNumpad(el, { onChange, onSubmit, erwarteteStellen = null }
     if (taste.dataset.aktion === 'ok') abschicken();
   });
 
-  // PC-Tastatur. Der Listener räumt sich selbst weg, sobald der Numpad-DOM
-  // nicht mehr im Dokument hängt (Screen-Wechsel).
-  function onKeydown(e) {
-    if (!el.isConnected) {
-      document.removeEventListener('keydown', onKeydown);
-      return;
-    }
-    if (e.key >= '0' && e.key <= '9') ziffer(e.key);
-    else if (e.key === 'Backspace') loeschen();
-    else if (e.key === 'Enter') abschicken();
-    else return;
-    e.preventDefault();
-  }
-  document.addEventListener('keydown', onKeydown);
+  // Diesen Ziffernblock zum aktiven Tastatur-Ziel machen.
+  ensureGlobalKey();
+  aktiv = { el, ziffer, loeschen, abschicken };
 
   return {
     reset() {
