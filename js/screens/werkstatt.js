@@ -1,8 +1,8 @@
 import { pickTask, taskKey, loesung } from '../engine/tasks.js';
 import { applyAnswer, pruefungBereit, TRAINING_ZIEL, comboStufe, naechsteReihe } from '../engine/progress.js';
-import { PARTS, addonsUnlocked, addonFuerReihe } from '../projects/rennwagen.js';
+import { PARTS, addonFuerReihe } from '../projects/rennwagen.js';
 import { RENNWAGEN_SVG } from '../projects/rennwagen.svg.js';
-import { mountCar, updateCar, montiere, zeigeVorschau, wackel } from '../ui/carRenderer.js';
+import { mountCar, updateCar, montiere, zeigeVorschau, wackel, warneTeil } from '../ui/carRenderer.js';
 import { createNumpad } from '../ui/numpad.js';
 import { createSchrauber } from '../ui/schrauber.js';
 import { sound } from '../audio.js';
@@ -12,6 +12,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   if (!profil) { navigate('start'); return; }
   if (!profil.reihen[reihe]) profil.reihen[reihe] = { training: 0, gemeistert: false };
   const stand = profil.reihen[reihe];
+  const bau = profil.projekte.rennwagen;
 
   let streak = 0;
   let wrongStreak = 0;
@@ -55,8 +56,8 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
 
   function zeichneAuto() {
     updateCar(buehne, {
-      teile: PARTS.slice(0, profil.projekte.rennwagen.grundbau).map(p => p.id),
-      addons: addonsUnlocked(profil.reihen),
+      teile: PARTS.slice(0, bau.grundbau).map(p => p.id),
+      addons: bau.montierteAddons,
     });
   }
 
@@ -66,7 +67,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     comboEl.textContent = stufe > 1 ? `🔥 x${stufe}` : '';
     pruefungBtn.classList.toggle('verborgen', !pruefungBereit(stand.training) || stand.gemeistert);
     const addon = addonFuerReihe(reihe);
-    if (addon) zeigeVorschau(buehne, addon.id, stand.training / TRAINING_ZIEL);
+    if (addon && !stand.gemeistert) zeigeVorschau(buehne, addon.id, stand.training / TRAINING_ZIEL);
   }
 
   // Schwebender Lob-Text über dem Auto (räumt sich selbst auf)
@@ -108,7 +109,6 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       aufgabeEl.classList.add('richtig');
       navigator.vibrate?.(30);
 
-      const bau = profil.projekte.rennwagen;
       if (bau.grundbau < PARTS.length) {
         bau.grundbau++;
         zeichneAuto();
@@ -139,6 +139,13 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       wrongStreak++;
       sound.falsch();
       schrauber.setMood('trost');
+      // Androhung des Verlusts: zuletzt gebautes Teil (oder Addon) blinkt bedrohlich
+      const warnId = bau.montierteAddons.at(-1)
+        || (bau.grundbau > 0 ? PARTS[bau.grundbau - 1].id : null);
+      if (warnId) {
+        warneTeil(buehne, warnId);
+        zeigeLob('Festhalten! 🔧', 'warn');
+      }
       aufgabeEl.querySelector('.eingabe').textContent = loesung(aufgabe);
       aufgabeEl.classList.add('zeigt-loesung');
       ctx.store.update(profil);

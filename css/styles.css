@@ -97,6 +97,7 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
   pointer-events: none; z-index: 5; white-space: nowrap;
 }
 .lob.mega { font-size: 1.8rem; color: var(--rot); }
+.lob.warn { color: var(--rot); text-shadow: 0 2px 0 #fff; }
 @keyframes lob-flug {
   0% { opacity: 0; transform: translate(-50%, 12px) scale(0.6); }
   20% { opacity: 1; transform: translate(-50%, 0) scale(1.15); }
@@ -179,6 +180,14 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 
 /* ===== Hub ===== */
 .kopf-knoepfe { display: flex; gap: 6px; }
+.zur-garage { position: relative; }
+.zur-garage.hat-neues { animation: empfohlen-puls 1.4s ease-out infinite; }
+.badge {
+  position: absolute; top: -7px; right: -7px;
+  background: var(--rot); color: #fff; border: 2px solid #fff;
+  border-radius: 50%; min-width: 20px; height: 20px; padding: 0 2px;
+  font-size: 0.75rem; display: flex; align-items: center; justify-content: center;
+}
 .reihen-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .reihen-knopf { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
 .reihen-knopf.gemeistert { background: var(--gelb); }

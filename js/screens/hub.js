@@ -8,6 +8,9 @@ export function showHub(root, ctx, navigate) {
   const profil = ctx.store.getActive();
   if (!profil) { navigate('start'); return; }
 
+  const montiert = profil.projekte.rennwagen.montierteAddons;
+  const offeneAddons = addonsUnlocked(profil.reihen).filter(id => !montiert.includes(id));
+
   root.innerHTML = `
     <div class="screen hub">
       <header>
@@ -15,7 +18,7 @@ export function showHub(root, ctx, navigate) {
         <h2>${profil.avatar} ${profil.name}</h2>
         <div class="kopf-knoepfe">
           <button type="button" class="btn klein stumm">${sound.istStumm() ? '🔇' : '🔊'}</button>
-          <button type="button" class="btn klein zur-garage">🏁</button>
+          <button type="button" class="btn klein zur-garage${offeneAddons.length ? ' hat-neues' : ''}">🏁${offeneAddons.length ? `<span class="badge">${offeneAddons.length}</span>` : ''}</button>
         </div>
       </header>
       <div class="auto-buehne klein"></div>
@@ -27,7 +30,7 @@ export function showHub(root, ctx, navigate) {
   mountCar(buehne, RENNWAGEN_SVG);
   updateCar(buehne, {
     teile: PARTS.slice(0, profil.projekte.rennwagen.grundbau).map(p => p.id),
-    addons: addonsUnlocked(profil.reihen),
+    addons: profil.projekte.rennwagen.montierteAddons,
   });
 
   const grid = root.querySelector('.reihen-grid');
