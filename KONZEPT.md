@@ -29,8 +29,11 @@ Familien-Tablet oder Eltern-Smartphone, kurze Sessions (5–15 Minuten).
 3. **Schwache Aufgaben kommen öfter.** Die Aufgaben-Engine merkt sich pro Profil,
    welche Aufgaben falsch oder langsam beantwortet wurden, und stellt diese häufiger
    (einfache Gewichtung, kein komplexes Spaced-Repetition-System).
-4. **Kein Strafdruck.** Bei einer falschen Antwort wird die richtige Lösung gezeigt
-   und die Aufgabe kommt später noch einmal. Es gibt keine Leben, keinen Game-Over.
+4. **Spannung ohne echten Verlust.** Bei einer falschen Antwort wird die richtige
+   Lösung gezeigt und die Aufgabe kommt später noch einmal. Es gibt keine Leben und
+   keinen Game-Over — aber als spürbare Konsequenz blinkt das zuletzt gebaute Teil
+   bedrohlich („droht sich zu lösen"), ohne tatsächlich verloren zu gehen. Das
+   erzeugt Stakes und hält die Aufmerksamkeit hoch, ohne zu bestrafen.
 5. **Dynamisch statt Stoppuhr.** Es gibt kein absolutes Zeitlimit und keine fremde
    Norm. Die App misst leise das eigene Niveau des Kindes (Trefferquote und Tempo
    pro Reihe) und passt die Anforderungen daran an — das Kind tritt immer nur gegen
@@ -70,6 +73,14 @@ Das Kind wählt beim Start ein Bauprojekt. Jedes Projekt besteht aus ca. **12 Ba
 - Die Addon-Reihenfolge ist pro Projekt fest an die Reihen gekoppelt
   (Reihe 1 → Addon 1, … Reihe 10 → Addon 10). Das stärkste Addon
   („Fliegendes Auto") gibt es erst, wenn **alle 10 Reihen** gemeistert sind.
+- **Freischalten ≠ Anbauen:** Eine bestandene Meisterprüfung *schaltet* das Addon
+  frei, montiert es aber nicht automatisch. Das Kind baut den Gewinn **selbst in der
+  Garage** an — mit Luftdruckschrauber-Sound, Montage-Animation und Feier. Das macht
+  das Belohnen zu einem eigenen, aktiven Spaß-Moment statt einer Nebenbei-Anzeige.
+- **Weitere Bauprojekte (Phase 2+):** Superheld (Ausrüstung baut sich auf), Model/
+  Laufsteg-Outfit, Rakete, Dino-Park, Piratenschiff, Roboter — jedes mit eigenem
+  Geschmack, damit jedes Kind „sein Ding" findet. Architektur (Teile/Addons als
+  Daten + benanntes SVG) ist darauf ausgelegt.
 
 ### 3.2 Modi
 
@@ -78,7 +89,7 @@ Das Kind wählt beim Start ein Bauprojekt. Jedes Projekt besteht aus ca. **12 Ba
 | **Werkstatt** (Hauptmodus) | Reihe wählen, Aufgaben lösen, Bauteile montieren. Pro richtiger Antwort füllt sich zusätzlich der Trainingsbalken der Reihe. | MVP |
 | **Meisterprüfung** | Freigeschaltet, wenn der Trainingsbalken einer Reihe voll ist: 12 gemischte Aufgaben der Reihe, höchstens 1 Fehler erlaubt, **kein Zeitlimit**. Bestanden → Addon + Pokal. Nicht bestanden → kein Verlust, einfach weiter trainieren. | MVP |
 | **Turbo-Prüfung** | Wiederholbare Prüfung einer bereits gemeisterten Reihe mit **dynamischem Tempo-Ziel**: Das Kind muss nur sein eigenes Trainingstempo schlagen (siehe 3.4). Belohnung: Turbo-Stern auf dem Pokal. Reines Bonus-Ziel — Addons hängen nie an der Zeit. | Phase 3 |
-| **Garage / Schlosshof** (Sammlung) | Das gebaute Objekt mit allen Addons bestaunen, drehen, Addons an-/abschalten. Pokal-Regal mit den gemeisterten Reihen. | MVP (einfach), Ausbau Phase 2 |
+| **Garage / Schlosshof** (Sammlung) | 3D-Showroom: das Objekt steht auf einem Drehteller, dreht sich und lässt sich mit dem Finger spinnen. Hier baut das Kind freigeschaltete Addons selbst an/ab (Luftschrauber, Animation, Konfetti). Pokal-Regal mit den gemeisterten Reihen. | MVP |
 | **Blitzrunde** | Freiwilliger Tempomodus: so viele Aufgaben wie möglich in 60 Sekunden, Highscore pro Profil. | Phase 3 |
 
 ### 3.3 Fortschritt & Motivation
