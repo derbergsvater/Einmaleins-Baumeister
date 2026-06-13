@@ -25,13 +25,25 @@ export const RENNWAGEN_SVG = `
 
   <g id="addon-rakete" class="addon">
     <rect x="40" y="198" width="54" height="22" rx="11" fill="url(#metall)"/>
+    <rect x="44" y="201" width="46" height="4" rx="2" fill="#fff" opacity="0.4"/>
     <path d="M40 198 l-16 11 l16 11 Z" fill="#ef233c"/>
-    <path d="M24 204 q-22 5 0 10 Z" fill="#ff9f1c"/>
+    <path d="M24 203 q-26 6 0 12 Z" fill="#ff9f1c">
+      <animate attributeName="d" values="M24 203 q-26 6 0 12 Z;M24 205 q-42 4 0 8 Z;M24 203 q-26 6 0 12 Z" dur="0.22s" repeatCount="indefinite"/>
+    </path>
+    <path d="M24 205 q-14 4 0 8 Z" fill="#ffd166">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="0.2s" repeatCount="indefinite"/>
+    </path>
   </g>
 
   <g id="addon-auspuff" class="addon">
     <rect x="56" y="234" width="34" height="12" rx="6" fill="url(#metall)"/>
-    <path d="M56 240 q-16 -9 -26 0 q10 9 26 0" fill="#ff9f1c"/>
+    <rect x="58" y="236" width="30" height="3" rx="1.5" fill="#fff" opacity="0.45"/>
+    <path d="M56 240 q-18 -10 -30 0 q12 10 30 0" fill="#ff9f1c">
+      <animate attributeName="opacity" values="1;0.5;1" dur="0.35s" repeatCount="indefinite"/>
+    </path>
+    <path d="M50 240 q-10 -5 -18 0 q9 5 18 0" fill="#ffd166">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="0.3s" repeatCount="indefinite"/>
+    </path>
   </g>
 
   <g id="addon-heckfluegel" class="addon">
@@ -52,8 +64,26 @@ export const RENNWAGEN_SVG = `
   </g>
 
   <g id="addon-turbo" class="addon">
-    <rect x="130" y="158" width="58" height="22" rx="11" fill="#118ab2"/>
-    <text x="159" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">TURBO</text>
+    <path d="M150 168 q24 -2 40 10" stroke="#5c677d" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <circle cx="150" cy="150" r="19" fill="url(#metall)" stroke="#5c677d" stroke-width="2"/>
+    <path d="M150 131 a19 19 0 0 1 17 10 l-9 6 a8 8 0 0 0 -8 -5 z" fill="#118ab2"/>
+    <g transform="translate(150 150)">
+      <g>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#e9eef5"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#cfd8e3" transform="rotate(45)"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#e9eef5" transform="rotate(90)"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#cfd8e3" transform="rotate(135)"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#e9eef5" transform="rotate(180)"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#cfd8e3" transform="rotate(225)"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#e9eef5" transform="rotate(270)"/>
+        <path d="M0 -3 L14 -2 L14 2 L0 3 Z" fill="#cfd8e3" transform="rotate(315)"/>
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="0.5s" repeatCount="indefinite"/>
+      </g>
+      <circle r="4" fill="#ffd166"/>
+    </g>
+    <circle cx="150" cy="150" r="21" fill="none" stroke="#ffd166" stroke-width="2" opacity="0.5">
+      <animate attributeName="opacity" values="0.15;0.7;0.15" dur="0.9s" repeatCount="indefinite"/>
+    </circle>
   </g>
 
   <g id="teil-rad-hinten" class="teil">
@@ -120,8 +150,12 @@ export const RENNWAGEN_SVG = `
   </g>
 
   <g id="addon-boost" class="addon">
-    <circle cx="294" cy="188" r="11" fill="#ef233c" stroke="#ffffff" stroke-width="3"/>
-    <text x="294" y="193" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">B</text>
+    <circle cx="294" cy="189" r="12" fill="#7a1015"/>
+    <circle cx="294" cy="186" r="11" fill="#ef233c" stroke="#ffffff" stroke-width="2"/>
+    <text x="294" y="189" text-anchor="middle" font-size="8" font-weight="bold" fill="#ffffff">BOOST</text>
+    <circle cx="294" cy="186" r="13" fill="none" stroke="#ffd166" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" values="0;0.9;0" dur="1.1s" repeatCount="indefinite"/>
+    </circle>
   </g>
 
   <g id="addon-fliegen" class="addon">

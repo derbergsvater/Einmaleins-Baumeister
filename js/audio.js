@@ -60,6 +60,13 @@ function createAudio() {
       ton(880 * faktor, 0.25, 'sine', 0.1, 0.25);
     },
     combo() { [784, 988, 1175].forEach((f, i) => ton(f, 0.12, 'square', i * 0.07, 0.15)); },
+    // Luftdruckschrauber: schnelle Ratterstöße + abfallender Zischer (Garage-Montage)
+    luftschrauber() {
+      for (let i = 0; i < 5; i++) rauschen(0.04, i * 0.05, 0.35, 2400);
+      ton(720, 0.18, 'sawtooth', 0.26, 0.18);
+      ton(420, 0.22, 'sawtooth', 0.33, 0.16);
+      ton(880, 0.18, 'sine', 0.4, 0.22);
+    },
     falsch() { ton(180, 0.35, 'triangle', 0, 0.2); },
     montage() {
       // Dreimal Ratsche, dann ein heller "sitzt!"-Klang

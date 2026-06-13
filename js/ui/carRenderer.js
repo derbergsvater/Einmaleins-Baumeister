@@ -36,3 +36,27 @@ export function montiere(el, teilId) {
   g.classList.add('sichtbar', 'montiert');
   setTimeout(() => g.classList.remove('montiert'), 700);
 }
+
+// Addon in der Garage anbauen — gleiche Pop-Animation wie ein Bauteil
+export function montiereAddon(el, addonId) {
+  const g = el.querySelector(`#addon-${addonId}`);
+  if (!g) return;
+  g.classList.add('sichtbar', 'montiert');
+  setTimeout(() => g.classList.remove('montiert'), 700);
+}
+
+// Warnblinken: ein Teil/Addon droht sich zu lösen (Fehler-Feedback, kein echter Verlust)
+export function warneTeil(el, id) {
+  const g = el.querySelector(`#teil-${id}`) || el.querySelector(`#addon-${id}`);
+  if (!g) return;
+  g.classList.add('warnung');
+  setTimeout(() => g.classList.remove('warnung'), 800);
+}
+
+// Großer Freude-Hüpfer der ganzen Bühne (neues Teil/Addon angebaut)
+export function feiere(el) {
+  el.classList.remove('feiert');
+  void el.offsetWidth;
+  el.classList.add('feiert');
+  setTimeout(() => el.classList.remove('feiert'), 900);
+}

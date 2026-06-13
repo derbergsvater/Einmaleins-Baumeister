@@ -61,7 +61,20 @@ h3 { font-size: 1.1rem; }
   60% { transform: translateY(4px) scale(1.12); opacity: 1; }
   100% { transform: none; opacity: 1; }
 }
-.teil.montiert { animation: montage-pop 0.6s ease-out; transform-box: fill-box; transform-origin: center; }
+.teil.montiert, .addon.montiert { animation: montage-pop 0.6s ease-out; transform-box: fill-box; transform-origin: center; }
+@keyframes warn-blink {
+  0%, 100% { filter: none; opacity: 1; }
+  25%, 75% { filter: drop-shadow(0 0 7px #d62828) brightness(1.4); }
+  50% { opacity: 0.25; filter: none; }
+}
+.teil.warnung, .addon.warnung { animation: warn-blink 0.4s ease-in-out 2; transform-box: fill-box; transform-origin: center; }
+@keyframes feier-hops {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.08) translateY(-12px); }
+  60% { transform: scale(0.97) translateY(0); }
+  100% { transform: scale(1); }
+}
+.auto-buehne.feiert { animation: feier-hops 0.85s ease-out; }
 @keyframes schweben {
   from { transform: translateY(0); }
   to { transform: translateY(-22px); }
