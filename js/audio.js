@@ -66,6 +66,12 @@ function createAudio() {
       ton(300, 0.08, 'triangle', 0.02, 0.18);
       rauschen(0.03, 0.06, 0.22, 900);
     },
+    // Tier freut sich: kurzes fröhliches Aufblubbern
+    tierFreude() {
+      ton(523, 0.1, 'sine', 0, 0.22);
+      ton(784, 0.12, 'sine', 0.08, 0.2);
+      ton(1047, 0.14, 'sine', 0.16, 0.18);
+    },
     // Luftdruckschrauber: schnelle Ratterstöße + abfallender Zischer (Garage-Montage)
     luftschrauber() {
       for (let i = 0; i < 5; i++) rauschen(0.04, i * 0.05, 0.35, 2400);
