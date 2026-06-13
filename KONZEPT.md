@@ -61,9 +61,12 @@ sind umgesetzt, sie nutzen **dieselben** Reihen-Trainings-/Meister-Daten:
   anbaut.
 - **Tierfamilie / Eierfarm** (Sammlung): pro Zahlenreihe ein **Ei**, das mit jeder
   richtigen Antwort mehr **Risse** bekommt; die bestandene Meisterprüfung macht es
-  schlüpfbereit, im **Tier-Stall** tippt das Kind das Ei zum **Schlüpfen** an (Tier
-  der Familie: Küken → … → Drache). Eine **fehlerfreie** Prüfung (0 Fehler) verdient
-  **Zubehör** fürs Tier (🎀). Am Ende: eine ganze Tierfamilie.
+  schlüpfbereit, im **Tier-Stall** tippt das Kind das Ei an → **Schlüpf-Show**
+  (Vollbild: Ei bebt, platzt, Tier springt mit Konfetti + Herzchen heraus). Danach
+  **Spielmodus**: Tier antippen (hüpft + Herzchen + Sound), **füttern** 🍎, **Schleife**
+  an/aus; Tiere sind im Stall jederzeit erneut bespielbar. Eine **fehlerfreie** Prüfung
+  (0 Fehler) verdient **Zubehör** fürs Tier (🎀). Tier der Familie: Küken → … → Drache.
+  Am Ende: eine ganze Tierfamilie.
 
 | Projekt | Grundbau (Beispiele) | Addons (Beispiele) |
 |---------|---------------------|--------------------|
