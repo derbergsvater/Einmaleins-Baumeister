@@ -1,8 +1,8 @@
 // Browser-Rundgang auf 6 Bildschirmgrößen: Profil → Tierfamilie → 10er trainieren → Prüfung → Schlüpfen.
-// Start: python3 -m http.server 8093 & node e2e/rundgang.mjs <screenshot-ordner>
+// Start: python3 -m http.server 8093 & node e2e/rundgang.mjs <screenshot-ordner>  (live: URL=https://… node e2e/rundgang.mjs …)
 // ponytail: nutzt die Playwright-Installation aus Fertigungstool/e2e statt eigener node_modules.
 import { chromium } from '/mnt/c/Users/StefanBerg/Documents/GitHub/Fertigungstool/e2e/node_modules/playwright/index.mjs';
-const S = process.argv[2] || ".", url = 'http://localhost:8093/';
+const S = process.argv[2] || ".", url = process.env.URL || 'http://localhost:8093/';
 const browser = await chromium.launch();
 const fehler = [];
 async function loese(page, n) {
