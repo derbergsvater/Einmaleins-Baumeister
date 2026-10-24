@@ -81,6 +81,11 @@ function createAudio() {
       ton(880, 0.18, 'sine', 0.4, 0.22);
     },
     falsch() { ton(180, 0.35, 'triangle', 0, 0.2); },
+    // Glühbirne geht an: leises helles Pling
+    tipp() {
+      ton(1568, 0.16, 'sine', 0, 0.12);
+      ton(2093, 0.3, 'sine', 0.08, 0.1);
+    },
     montage() {
       // Dreimal Ratsche, dann ein heller "sitzt!"-Klang
       rauschen(0.05, 0);

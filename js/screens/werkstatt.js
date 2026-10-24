@@ -3,7 +3,10 @@ import { applyAnswer, pruefungBereit, TRAINING_ZIEL, comboStufe, naechsteReihe }
 import { getProjekt } from '../projects/registry.js';
 import { createNumpad } from '../ui/numpad.js';
 import { createSchrauber } from '../ui/schrauber.js';
+import { zeigeTipp } from '../ui/tipp.js';
 import { sound } from '../audio.js';
+
+const TIPP_NACH_MS = 10000; // so lange ohne Eingabe, dann wackelt die Glühbirne
 
 export function showWerkstatt(root, ctx, navigate, { reihe }) {
   const profil = ctx.store.getActive();
@@ -20,6 +23,8 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   let aufgabe = null;
   let gesperrt = false;
   let numpad = null;
+  let tippUhr = null;
+  let tippGenutzt = false;
 
   root.innerHTML = `
     <div class="screen werkstatt">
@@ -29,6 +34,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
         <span class="combo"></span>
       </header>
       <div class="spalte-links">
+      <div class="tipp-karte"></div>
       <div class="projekt-buehne"></div>
       ${stand.gemeistert ? `
       <div class="gemeistert-banner">
@@ -56,6 +62,30 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
   const comboEl = root.querySelector('.combo');
   const fuellungEl = root.querySelector('.balken .fuellung');
   const pruefungBtn = root.querySelector('.pruefung-knopf');
+  const screenEl = root.querySelector('.werkstatt');
+  const tippEl = root.querySelector('.tipp-karte');
+
+  // Glühbirne: 10 s ohne Eingabe → sie leuchtet und wackelt, Antippen öffnet den Tipp
+  function starteTippUhr() {
+    clearTimeout(tippUhr);
+    const birne = aufgabeEl.querySelector('.birne');
+    if (!birne || birne.classList.contains('leuchtet')) return;
+    tippUhr = setTimeout(() => {
+      if (gesperrt || !birne.isConnected) return;
+      birne.classList.add('leuchtet');
+      birne.disabled = false;
+    }, TIPP_NACH_MS);
+  }
+
+  function oeffneTipp(mitLoesung) {
+    screenEl.classList.add('tipp-offen');
+    zeigeTipp(tippEl, aufgabe, { mitLoesung, onZu: mitLoesung ? naechsteAufgabe : schliesseTipp });
+  }
+
+  function schliesseTipp() {
+    screenEl.classList.remove('tipp-offen');
+    tippEl.innerHTML = '';
+  }
 
   function zeigeLob(text, klasse = '') {
     const lob = document.createElement('span');
@@ -81,19 +111,30 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     letzte = [normKey(aufgabe), ...letzte].slice(0, 3);
     gesperrt = false;
     aufgabeEl.classList.remove('richtig', 'zeigt-loesung');
-    aufgabeEl.innerHTML = `<span class="term">${aufgabe.a} · ${aufgabe.b} = <span class="eingabe">?</span></span>`;
+    aufgabeEl.innerHTML = `<span class="term">${aufgabe.a} · ${aufgabe.b} = <span class="eingabe">?</span></span>
+      <button type="button" class="birne" disabled aria-label="Tipp">💡</button>`;
+    aufgabeEl.querySelector('.birne').onclick = () => {
+      if (screenEl.classList.contains('tipp-offen')) { schliesseTipp(); return; }
+      tippGenutzt = true;
+      oeffneTipp(false);
+    };
+    tippGenutzt = false;
+    schliesseTipp();
     numpad?.reset();
+    starteTippUhr();
   }
 
   function antwort(wert) {
     if (gesperrt) return;
     gesperrt = true;
+    clearTimeout(tippUhr);
+    schliesseTipp(); // Bühne wieder zeigen, damit das Kind den Einbau sieht
     const key = taskKey(aufgabe);
     const s = profil.aufgabenStats[key] || (profil.aufgabenStats[key] = { richtig: 0, falsch: 0 });
     const richtig = Number(wert) === loesung(aufgabe);
 
     if (richtig) {
-      s.richtig++;
+      if (!tippGenutzt) s.richtig++; // mit Tipp gelöst zählt fürs Training, gilt aber noch nicht als sicher
       wrongStreak = 0;
       if (erholung > 0) erholung--;
       const stufeVorher = comboStufe(streak);
@@ -136,13 +177,15 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       aufgabeEl.classList.add('zeigt-loesung');
       ctx.store.update(profil);
       zeichneStatus();
-      setTimeout(naechsteAufgabe, 1700);
+      // Statt nur die Lösung zu blitzen: Rechenweg im Punktefeld zeigen, Kind tippt „Weiter“
+      setTimeout(() => { if (aufgabeEl.isConnected) oeffneTipp(true); }, 600);
     }
   }
 
   numpad = createNumpad(root.querySelector('.numpad'), {
     onChange: (wert) => {
       if (gesperrt) return;
+      starteTippUhr();
       const eingabe = aufgabeEl.querySelector('.eingabe');
       if (eingabe) eingabe.textContent = wert || '?';
     },

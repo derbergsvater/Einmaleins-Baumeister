@@ -11,6 +11,6 @@ fliegenden Auto).
 - **Konzept:** [KONZEPT.md](KONZEPT.md)
 - **Stack:** Vanilla JS, SVG, localStorage, GitHub Pages — kein Backend
 - **Spielen:** https://derbergsvater.github.io/Einmaleins-Baumeister/ — auf dem Tablet über „Zum Home-Bildschirm“ als App ablegen (läuft danach auch offline)
-- **Status:** Phase 1 (MVP) spielbar — Rennwagen + Tierfamilie, Reihen 1–10, Meisterprüfung, Garage/Tier-Stall; Tablet-Layout hoch & quer
+- **Status:** Phase 1 (MVP) spielbar — Rennwagen + Tierfamilie, Reihen 1–10, Meisterprüfung, Garage/Tier-Stall; Tablet-Layout hoch & quer; Tipp-Glühbirne + Rechenweg als animiertes Punktefeld
 - **Lokal starten:** `python3 -m http.server 8080` und `http://localhost:8080` öffnen
 - **Tests:** `npm test` (Node ≥ 20, keine Abhängigkeiten)

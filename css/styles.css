@@ -229,6 +229,83 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
 .combo { font-size: 1.2rem; font-weight: bold; min-width: 3.2em; text-align: right; }
 .pruefung-knopf { background: var(--gelb); }
 
+/* ===== Glühbirne & Tipp-Karte (Malfeld) ===== */
+.aufgabe { gap: 12px; }
+.birne {
+  font-size: 2.2rem; line-height: 1; padding: 4px; background: none; border: none;
+  filter: grayscale(1); opacity: 0.3; transition: opacity 0.4s, filter 0.4s;
+}
+.birne.leuchtet {
+  opacity: 1; cursor: pointer; transform-origin: 50% 15%;
+  filter: drop-shadow(0 0 10px #ffd166) drop-shadow(0 0 4px #ffb703);
+  animation: birne-wackel 2.2s ease-in-out infinite;
+}
+@keyframes birne-wackel {
+  0%, 55%, 100% { transform: rotate(0) scale(1); }
+  8% { transform: rotate(-20deg) scale(1.2); }
+  18% { transform: rotate(16deg) scale(1.2); }
+  28% { transform: rotate(-10deg) scale(1.1); }
+  38% { transform: rotate(6deg); }
+  46% { transform: rotate(-3deg); }
+}
+.aufgabe.richtig .birne, .aufgabe.zeigt-loesung .birne { visibility: hidden; }
+
+/* Tipp offen: Karte ersetzt Bühne + Status, Aufgabe und Ziffernblock bleiben bedienbar */
+.tipp-karte {
+  display: none; flex-direction: column; gap: 6px; flex: 1 1 0; min-height: 0;
+  background: #fff; border: 3px solid var(--tinte); border-radius: var(--radius);
+  box-shadow: var(--schatten); padding: 8px 12px;
+  animation: karte-rein 0.3s ease-out;
+}
+@keyframes karte-rein { from { opacity: 0; transform: scale(0.92); } }
+.werkstatt.tipp-offen .tipp-karte { display: flex; }
+.werkstatt.tipp-offen .spalte-links > :not(.tipp-karte) { display: none !important; }
+.tipp-kopf { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: bold; font-size: 1.1rem; }
+.tipp-zu { font: inherit; font-size: 1.3rem; background: none; border: none; padding: 2px 8px; cursor: pointer; color: var(--tinte); }
+.tipp-bild { flex: 1 1 0; min-height: 80px; display: flex; }
+.malfeld { width: 100%; height: 100%; display: block; overflow: visible; }
+.tipp-zeilen { text-align: center; font-weight: bold; }
+.tipp-zeilen p { animation: zeile-rein 0.4s ease-out both; animation-delay: var(--d, 0s); }
+@keyframes zeile-rein { from { opacity: 0; transform: translateY(8px); } }
+.rechnung { font-size: 1.5rem; }
+.frage { display: inline-block; min-width: 1.6em; border: 3px dashed var(--blau); border-radius: 10px; color: var(--blau); padding: 0 4px; }
+.loesung { color: var(--gruen); }
+.tipp-knoepfe { display: flex; justify-content: center; gap: 10px; }
+.tipp-knoepfe:empty { display: none; }
+
+/* Punkte: a = blau (Reihe/1. Teil), a2 = zweites Blau, b = orange (2. Teil), c = gelb (dazugedacht) */
+.malfeld circle { fill: var(--blau); }
+.malfeld .f-a2 circle { fill: #4cc9f0; }
+.malfeld .f-b circle { fill: #ff9f1c; animation: farbe-b 0.4s both; animation-delay: var(--d2); }
+@keyframes farbe-b { from { fill: var(--blau); } }
+.malfeld .f-c circle { fill: var(--gelb); stroke: #e0a800; stroke-width: 2; }
+.malfeld .stange { fill: #ffe8c2; stroke: #e0a800; stroke-width: 2; }
+.malfeld .reihe, .malfeld .an { transform-box: fill-box; transform-origin: center; animation: pop-rein 0.35s ease-out both; animation-delay: var(--d); }
+@keyframes pop-rein { from { opacity: 0; transform: scale(0.3); } }
+.malfeld .reihe.kopie { animation: kopie-rein 0.6s ease-out both; animation-delay: var(--d); }
+@keyframes kopie-rein { from { opacity: 0.4; transform: translateY(-22px); } }
+.malfeld .reihe.teilen { animation: pop-rein 0.35s ease-out both, teilen 0.5s ease-out both; animation-delay: var(--d), var(--d2); }
+@keyframes teilen { from { transform: translateY(-8px); } }
+.malfeld .reihe.weg { animation: pop-rein 0.35s ease-out both, weg 0.6s ease-in forwards; animation-delay: var(--d), var(--d2); }
+@keyframes weg { to { opacity: 0.25; } }
+.malfeld .an.aus { animation: pop-rein 0.35s ease-out both, weg-ganz 0.4s forwards; animation-delay: var(--d), var(--d2); }
+@keyframes weg-ganz { to { opacity: 0; } }
+.malfeld .strich {
+  stroke: var(--rot); stroke-width: 4; stroke-linecap: round;
+  transform-box: fill-box; transform-origin: left center;
+  animation: strich-zieh 0.4s ease-out both; animation-delay: var(--d);
+}
+.malfeld .strich.schnitt { stroke: var(--tinte); stroke-dasharray: 8 6; stroke-width: 3; }
+@keyframes strich-zieh { from { transform: scaleX(0); } }
+.malfeld .klammer path { fill: none; stroke: var(--tinte); stroke-width: 2.5; stroke-linejoin: round; }
+.malfeld text { font: bold 17px "Comic Sans MS", "Segoe UI", system-ui, sans-serif; fill: var(--tinte); }
+.malfeld .klammer.warn text { fill: var(--rot); }
+.malfeld .klammer.warn path { stroke: var(--rot); }
+.malfeld .schild { fill: var(--grau); }
+.malfeld.direkt .reihe:not(.f-c) { --d: -1s !important; }
+.malfeld .dreh { animation: drehen 1.1s ease-in-out 0.6s forwards; }
+@keyframes drehen { to { transform: rotate(90deg); } }
+
 /* ===== Prüfung & Ergebnis ===== */
 .gewinn-vorschau { text-align: center; }
 .gewinn-buehne { max-width: 240px; }
@@ -427,5 +504,20 @@ svg.fliegt { animation: schweben 2.2s ease-in-out infinite alternate; }
   .werkstatt > header, .pruefung > header { grid-column: 1 / -1; }
   .spalte-links, .spalte-rechts { display: flex; flex-direction: column; gap: 14px; }
   .spalte-rechts { align-self: center; }
+  .werkstatt.tipp-offen .spalte-links { align-self: stretch; }
   .auto-buehne svg { max-height: 46vh; }
+}
+
+/* Niedrige Handys (iPhone SE & Co.): alles etwas enger, damit nichts scrollt */
+@media (max-height: 700px) and (orientation: portrait) {
+  .screen { padding: 10px 14px; gap: 8px; }
+  .auto-buehne svg { max-height: 24vh; }
+  .ei-szene, .tier-szene { min-height: 0; }
+  .ei { width: 76px; }
+  .schrauber-svg { width: 48px; }
+  .term { font-size: 2.2rem; }
+  .aufgabe { min-height: 56px; }
+  .taste { min-height: 50px; padding: 8px 0; }
+  .numpad-grid { gap: 8px; }
+  .btn.gross { padding: 10px 18px; font-size: 1.2rem; }
 }

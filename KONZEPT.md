@@ -154,6 +154,20 @@ immer die eigene bisherige Leistung:
 5. **Frust-Bremse:** Nach 3 Fehlern in Folge schaltet die Engine automatisch zwei
    leichte Erfolgsaufgaben dazwischen (bekannte, sichere Aufgaben), damit das Kind
    wieder ein Erfolgserlebnis hat und im Spiel bleibt.
+6. **Tipp-Glühbirne (Werkstatt):** Neben jeder Aufgabe sitzt eine blasse 💡. Nach
+   10 Sekunden ohne Eingabe leuchtet und wackelt sie; Antippen zeigt einen Tipp als
+   animiertes Punktefeld (a · b = a Reihen à b Punkte, Fünfer-Lücke wie im
+   Hunderterfeld). Stufe 1 ist die Plus-Aufgabe (3 · 5 = 5 + 5 + 5, Reihe für Reihe),
+   Stufe 2 der leichte Weg über Kernaufgaben ·1/·2/·5/·10: zerlegen (7 · 8 =
+   5 · 8 + 2 · 8), von der 10 aus (9 · 5 = 10 · 5 − 5), halbieren (5 · 7 = Hälfte von
+   10 · 7), verdoppeln, Zehnerstangen — wenn es leichter wird, nach dem Tauschen der
+   Faktoren (das Feld dreht sich sichtbar um 90°). Der Tipp nennt nie das Ergebnis;
+   die letzte Rechnung bleibt „= ?“. Mit Tipp gelöst zählt fürs Training, gilt in der
+   Aufgaben-Statistik aber noch nicht als sicher. In der Meisterprüfung gibt es keine
+   Glühbirne.
+7. **Rechenweg nach Fehlern:** Statt die Lösung nur kurz aufblitzen zu lassen, zeigt
+   die Werkstatt nach einer falschen Antwort denselben Rechenweg mit Lösung; das Kind
+   geht mit „Weiter“ selbst zur nächsten Aufgabe (kein Zeitdruck).
 
 ## 4. Benutzeraccounts: lokal und kindersicher
 
