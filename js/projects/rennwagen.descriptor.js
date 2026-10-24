@@ -44,6 +44,7 @@ export const rennwagenProjekt = {
       sound.montage();
       return { gebaut: true, lob: `${PARTS[bau.grundbau - 1].label} montiert! 🔧` };
     }
+    this.zeichne(el, profil, reihe); // Bauplan-Vorschau wächst weiter, auch bei fertigem Grundbau
     wackel(auto(el));
     return { gebaut: false };
   },
@@ -56,6 +57,7 @@ export const rennwagenProjekt = {
 
   beiPruefungBestanden() { /* Addon wird über reihen.gemeistert freigeschaltet, kein Extra nötig */ },
 
+  belohnungFrei(profil, reihe) { return addonsUnlocked(profil.reihen).includes(addonFuerReihe(reihe).id); },
   belohnungLabel(reihe) { return addonFuerReihe(reihe).label; },
   belohnungAktion(reihe) { return `${addonFuerReihe(reihe).label} anbauen!`; },
   belohnungHinweis() { return 'Jetzt selbst in der Garage anbauen!'; },
@@ -119,10 +121,11 @@ export const rennwagenProjekt = {
     }
 
     // Drehteller (Faux-3D)
-    let winkel = -20, vel = 0.25, ziehen = false, letzteX = 0, raf = 0;
+    const grundDreh = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 0.25;
+    let winkel = -20, vel = grundDreh, ziehen = false, letzteX = 0, raf = 0;
     function frame() {
       if (!buehne.isConnected) { cancelAnimationFrame(raf); return; }
-      if (!ziehen) { winkel += vel; vel += (0.25 - vel) * 0.04; }
+      if (!ziehen) { winkel += vel; vel += (grundDreh - vel) * 0.04; }
       buehne.style.setProperty('--dreh', `${winkel.toFixed(1)}deg`);
       raf = requestAnimationFrame(frame);
     }

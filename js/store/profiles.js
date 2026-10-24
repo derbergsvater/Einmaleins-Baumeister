@@ -20,15 +20,24 @@ export function createStore(storage) {
   function lesen() {
     let daten;
     try {
-      daten = JSON.parse(storage.getItem(KEY)) || { profiles: {}, activeId: null };
-    } catch {
+      daten = JSON.parse(storage.getItem(KEY));
+    } catch { /* kaputtes JSON → leer starten */ }
+    if (!daten || typeof daten !== 'object' || !daten.profiles || typeof daten.profiles !== 'object') {
       daten = { profiles: {}, activeId: null };
     }
-    for (const profil of Object.values(daten.profiles)) normalisiere(profil);
+    for (const [id, profil] of Object.entries(daten.profiles)) {
+      if (profil && typeof profil === 'object') normalisiere(profil);
+      else delete daten.profiles[id];
+    }
     return daten;
   }
+  // Speichern darf das Spiel nie anhalten (Speicher voll/gesperrt) — dann eben ohne Sichern weiter.
   function schreiben(daten) {
-    storage.setItem(KEY, JSON.stringify(daten));
+    try {
+      storage.setItem(KEY, JSON.stringify(daten));
+    } catch (e) {
+      console.warn('Speichern fehlgeschlagen', e);
+    }
   }
   return {
     list() {

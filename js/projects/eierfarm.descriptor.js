@@ -1,6 +1,6 @@
 // Eierfarm als Projekt-Descriptor (gleiche Schnittstelle wie der Rennwagen).
 // Nutzt dieselben Reihen-Trainings-/Meister-Daten; eigene Visuals (Eier/Tiere).
-import { TIERE, ACCESSOIRE, RISS_MAX, eiMarkup, tierMarkup, familieGridMarkup } from './eierfarm.js';
+import { TIERE, ACCESSOIRE, RISS_MAX, eiMarkup, tierMarkup, familieGridMarkup, hatAccessoire } from './eierfarm.js';
 import { TRAINING_ZIEL } from '../engine/progress.js';
 import { feuerKonfetti } from '../ui/confetti.js';
 import { sound } from '../audio.js';
@@ -10,9 +10,8 @@ function szene(el) { return el.querySelector('.ei-szene'); }
 // Vollbild-Show: Ei platzt, Tier schlüpft, danach kann man mit dem Tier spielen.
 // neu=true → mit Schlüpf-Sequenz; neu=false → direkt Spielmodus für ein vorhandenes Tier.
 function tierShow(host, profil, reihe, neu, onClose) {
-  const ef = profil.projekte.eierfarm;
   const t = TIERE[reihe];
-  const hatAcc = !!ef.accessoires[reihe];
+  const hatAcc = hatAccessoire(profil, reihe);
 
   const overlay = document.createElement('div');
   overlay.className = 'schlupf-overlay';
@@ -55,7 +54,7 @@ function tierShow(host, profil, reihe, neu, onClose) {
     tierGross.classList.add('spielt');
     herzen();
     sound.tierFreude();
-    navigator.vibrate?.(20);
+    sound.vibriere(20);
   }
 
   figur.addEventListener('click', spielen);
@@ -100,6 +99,7 @@ export const eierfarmProjekt = {
   slogan: 'Rechne und brüte deine Tierfamilie aus!',
   sammlungName: 'Tier-Stall',
   sammlungIcon: '🐾',
+  perfektBonus: `${ACCESSOIRE} Schleife`,
 
   mountBuehne(el) {
     el.innerHTML = '<div class="ei-szene"></div>';
@@ -111,7 +111,7 @@ export const eierfarmProjekt = {
     const s = szene(el);
     if (!s) return;
     if (stand.gemeistert && ef.geschluepft[reihe]) {
-      s.innerHTML = tierMarkup(reihe, ef.accessoires[reihe]);
+      s.innerHTML = tierMarkup(reihe, hatAccessoire(profil, reihe));
     } else if (stand.gemeistert) {
       s.innerHTML = eiMarkup(RISS_MAX, true);
     } else {
@@ -141,6 +141,7 @@ export const eierfarmProjekt = {
     if (fehler === 0) profil.projekte.eierfarm.accessoires[reihe] = true;
   },
 
+  belohnungFrei() { return true; },
   belohnungLabel(reihe) { return `${TIERE[reihe].tier} ${TIERE[reihe].emoji}`; },
   belohnungAktion(reihe) { return `${TIERE[reihe].tier} schlüpfen lassen! ${TIERE[reihe].emoji}`; },
   belohnungHinweis() { return 'Im Tier-Stall zum Schlüpfen antippen!'; },

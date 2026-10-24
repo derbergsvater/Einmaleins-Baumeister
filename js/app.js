@@ -15,7 +15,13 @@ const screens = {
   garage: showGarage,
 };
 const root = document.getElementById('app');
-const ctx = { store: createStore(window.localStorage) };
+function speicher() {
+  try { return window.localStorage; } catch {
+    const m = new Map();
+    return { getItem: k => m.get(k) ?? null, setItem: (k, v) => m.set(k, String(v)) };
+  }
+}
+const ctx = { store: createStore(speicher()) };
 
 export function navigate(name, params = {}) {
   const screen = screens[name];
@@ -29,3 +35,5 @@ export function navigate(name, params = {}) {
 }
 
 navigate(ctx.store.getActive() ? 'hub' : 'start');
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});

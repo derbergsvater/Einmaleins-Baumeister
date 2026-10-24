@@ -56,3 +56,13 @@ test('addonFuerReihe und gemeisterteReihen', () => {
     [2, 5]
   );
 });
+
+test('belohnungFrei: Fliegendes Auto (10er) erst mit allen 10 Reihen', async () => {
+  globalThis.matchMedia ??= () => ({ matches: false });
+  const { rennwagenProjekt } = await import('../js/projects/rennwagen.descriptor.js');
+  const nur10 = { reihen: { 10: { gemeistert: true } } };
+  assert.equal(rennwagenProjekt.belohnungFrei(nur10, 10), false);
+  const alle = { reihen: Object.fromEntries(Array.from({ length: 10 }, (_, i) => [i + 1, { gemeistert: true }])) };
+  assert.equal(rennwagenProjekt.belohnungFrei(alle, 10), true);
+  assert.equal(rennwagenProjekt.belohnungFrei({ reihen: { 3: { gemeistert: true } } }, 3), true);
+});

@@ -109,3 +109,19 @@ test('keine Wiederholung innerhalb der letzten 3 Aufgaben (laufende Auswahl)', (
   }
   assert.ok(new Set(verlauf).size >= 6, 'zu wenig Abwechslung insgesamt');
 });
+
+test('gewicht: alte Fehler werden durch spätere richtige Antworten abgebaut', () => {
+  assert.equal(gewicht({ richtig: 0, falsch: 5 }), 11);
+  assert.ok(gewicht({ richtig: 6, falsch: 5 }) < gewicht({ richtig: 0, falsch: 5 }));
+  assert.equal(gewicht({ richtig: 40, falsch: 5 }), 0.5);
+});
+
+test('Anker-Phase hängt am Trainingsstand der Reihe, nicht an Tauschaufgaben anderer Reihen', () => {
+  // 2·7 und 7·2 je 3x richtig (aus der 2er-Reihe) → ohne training würde die 7er-Reihe die Aufwärmphase überspringen
+  const stats = { '2x7': { richtig: 3, falsch: 0 }, '7x2': { richtig: 3, falsch: 0 } };
+  const rng = lcg(7);
+  for (let i = 0; i < 50; i++) {
+    const t = pickTask({ reihe: 7, stats, training: 0 }, rng);
+    assert.ok([1, 2, 5, 10].includes(t.a === 7 ? t.b : t.a), `keine Ankeraufgabe: ${t.a}·${t.b}`);
+  }
+});

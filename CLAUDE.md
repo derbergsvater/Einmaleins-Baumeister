@@ -10,7 +10,9 @@ Gemeisterte Zahlenreihen schalten Addons frei.
 - Vanilla JS (ES-Module), kein Build-Tool, kein Backend
 - SVG-Grafiken mit benannten Bauteil-Gruppen, Einblendung per CSS
 - Profile/Fortschritt in `localStorage` (Geräte-Profile, keine Server-Accounts)
-- Hosting: GitHub Pages, PWA-Basics (Manifest + Service Worker)
+- Hosting: GitHub Pages aus `main` (Root), public Repo → https://derbergsvater.github.io/Einmaleins-Baumeister/
+- PWA: `manifest.webmanifest` + `sw.js` (Netz zuerst, Cache als Offline-Rückfall — Updates kommen ohne Versionspflege an)
+- Browser-Check aller Bildschirmgrößen: `e2e/rundgang.mjs` (iPad hoch/quer, altes iPad, Handy) — Überlauf muss 0 sein
 - Tests: `node --test` für Engine-Module (`js/engine/` muss DOM-frei bleiben)
 
 ## Regeln

@@ -20,13 +20,19 @@ export function showPruefung(root, ctx, navigate, { reihe }) {
         <span class="reihe-titel">🏆 Meisterprüfung: ${reihe}er</span>
         <span></span>
       </header>
+      <div class="spalte-links">
       <div class="gewinn-vorschau">
         <div class="projekt-buehne klein gewinn-buehne"></div>
-        <p class="gewinn-text">🎁 Das gewinnst du: <strong>${projekt.belohnungLabel(reihe)}</strong></p>
+        <p class="gewinn-text">${projekt.belohnungFrei({ ...profil, reihen: { ...profil.reihen, [reihe]: { gemeistert: true } } }, reihe)
+          ? `🎁 Das gewinnst du: <strong>${projekt.belohnungLabel(reihe)}</strong>`
+          : `🎯 Ein Schritt näher zum <strong>${projekt.belohnungLabel(reihe)}</strong> (braucht alle 10 Reihen)`}</p>
       </div>
       <div class="punkte">${aufgaben.map(() => '<span class="punkt"></span>').join('')}</div>
-      <div class="aufgabe"></div>
-      <div class="numpad"></div>
+      </div>
+      <div class="spalte-rechts">
+        <div class="aufgabe"></div>
+        <div class="numpad"></div>
+      </div>
     </div>`;
 
   projekt.belohnungVorschau(root.querySelector('.gewinn-buehne'), profil, reihe);
@@ -40,25 +46,31 @@ export function showPruefung(root, ctx, navigate, { reihe }) {
   }
 
   function fertig() {
+    if (!aufgabeEl.isConnected) return; // Kind hat inzwischen abgebrochen → nichts überschreiben
     const { bestanden, fehler } = evalExam(ergebnisse);
     if (bestanden) {
-      profil.reihen[reihe] = { ...(profil.reihen[reihe] || { training: 0 }), gemeistert: true };
+      const vorher = profil.reihen[reihe] || { training: 0 };
+      profil.reihen[reihe] = { ...vorher, gemeistert: true, perfekt: vorher.perfekt || fehler === 0 };
       projekt.beiPruefungBestanden(profil, reihe, fehler);
       ctx.store.update(profil);
       const naechste = naechsteReihe(profil.reihen, reihe);
+      const frei = projekt.belohnungFrei(profil, reihe);
       sound.fanfare();
       root.innerHTML = `
         <div class="screen ergebnis">
           <h2>🏆 Gemeistert!</h2>
           <p class="gross-text">Du bist jetzt Meister der ${reihe}er-Reihe!</p>
-          <p class="addon-neu">🎁 Gewonnen: <strong>${projekt.belohnungLabel(reihe)}</strong><br><small>${projekt.belohnungHinweis()}</small></p>
-          ${fehler === 0 ? '<p class="bonus-text">⭐ Perfekt — 0 Fehler! Bonus verdient!</p>' : ''}
+          ${frei
+            ? `<p class="addon-neu">🎁 Gewonnen: <strong>${projekt.belohnungLabel(reihe)}</strong><br><small>${projekt.belohnungHinweis()}</small></p>`
+            : `<p class="addon-neu">🔒 <strong>${projekt.belohnungLabel(reihe)}</strong> gibt es, sobald du ALLE 10 Reihen gemeistert hast!</p>`}
+          ${fehler === 0 ? `<p class="bonus-text">⭐ Perfekt — 0 Fehler!${projekt.perfektBonus ? ` ${projekt.perfektBonus} verdient!` : ''}</p>` : ''}
           ${naechste ? '' : '<p class="gross-text">⭐ ALLE 10 Reihen gemeistert — du bist 1x1-MEISTER!</p>'}
-          <button type="button" class="btn gross weiter">${projekt.sammlungIcon} ${projekt.belohnungAktion(reihe)}</button>
+          ${frei ? `<button type="button" class="btn gross weiter">${projekt.sammlungIcon} ${projekt.belohnungAktion(reihe)}</button>` : ''}
           ${naechste ? `<button type="button" class="btn weiter-reihe-btn">Weiter: ${naechste}er-Reihe 🔧</button>` : ''}
         </div>`;
       feuerKonfetti(root);
-      root.querySelector('.weiter').onclick = () => navigate('garage');
+      const weiterBtn = root.querySelector('.weiter');
+      if (weiterBtn) weiterBtn.onclick = () => navigate('garage');
       const reiheBtn = root.querySelector('.weiter-reihe-btn');
       if (reiheBtn) reiheBtn.onclick = () => navigate('werkstatt', { reihe: naechste });
     } else {

@@ -2,6 +2,8 @@ import { TRAINING_ZIEL, naechsteReihe } from '../engine/progress.js';
 import { getProjekt } from '../projects/registry.js';
 import { sound } from '../audio.js';
 
+const esc = (s) => String(s).replace(/[&<>"']/g, (z) => `&#${z.charCodeAt(0)};`);
+
 export function showHub(root, ctx, navigate) {
   const profil = ctx.store.getActive();
   if (!profil) { navigate('start'); return; }
@@ -12,7 +14,7 @@ export function showHub(root, ctx, navigate) {
     <div class="screen hub">
       <header>
         <button type="button" class="btn klein profil-wechsel">👤</button>
-        <h2>${profil.avatar} ${profil.name}</h2>
+        <h2>${esc(profil.avatar)} ${esc(profil.name)}</h2>
         <div class="kopf-knoepfe">
           <button type="button" class="btn klein stumm">${sound.istStumm() ? '🔇' : '🔊'}</button>
           <button type="button" class="btn klein zur-sammlung${offene ? ' hat-neues' : ''}">${projekt.sammlungIcon}${offene ? `<span class="badge">${offene}</span>` : ''}</button>

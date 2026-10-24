@@ -3,6 +3,11 @@
 export const PROJEKT_ID = 'eierfarm';
 export const ACCESSOIRE = '🎀';
 
+// Zubehör gibt es für eine fehlerfreie Prüfung — egal, welches Projekt dabei aktiv war
+export function hatAccessoire(profil, reihe) {
+  return !!(profil.projekte.eierfarm.accessoires[reihe] || profil.reihen[reihe]?.perfekt);
+}
+
 // Reihe 1–10 → Tier der Familie (klein nach groß = stärkere Belohnung später)
 export const TIERE = {
   1: { tier: 'Küken', emoji: '🐣' },
@@ -64,7 +69,7 @@ export function familieGridMarkup(profil) {
     const stand = profil.reihen[r] || {};
     let inhalt, cls;
     if (stand.gemeistert && ef.geschluepft[r]) {
-      inhalt = `${TIERE[r].emoji}${ef.accessoires[r] ? `<span class="mini-acc">${ACCESSOIRE}</span>` : ''}`;
+      inhalt = `${TIERE[r].emoji}${hatAccessoire(profil, r) ? `<span class="mini-acc">${ACCESSOIRE}</span>` : ''}`;
       cls = 'tier';
     } else if (stand.gemeistert) {
       inhalt = '🥚'; cls = 'schlupfbereit';

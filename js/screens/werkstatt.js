@@ -15,6 +15,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
 
   let streak = 0;
   let wrongStreak = 0;
+  let erholung = 0; // Frust-Bremse: so viele sichere Aufgaben kommen noch (KONZEPT 3.4 Punkt 5)
   let letzte = [];
   let aufgabe = null;
   let gesperrt = false;
@@ -27,6 +28,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
         <span class="reihe-titel">${reihe}er-Reihe</span>
         <span class="combo"></span>
       </header>
+      <div class="spalte-links">
       <div class="projekt-buehne"></div>
       ${stand.gemeistert ? `
       <div class="gemeistert-banner">
@@ -40,8 +42,11 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
         <div class="balken gross"><span class="fuellung"></span></div>
       </div>
       <button type="button" class="btn gross pruefung-knopf verborgen">🏆 Zur Meisterprüfung!</button>
-      <div class="aufgabe"></div>
-      <div class="numpad"></div>
+      </div>
+      <div class="spalte-rechts">
+        <div class="aufgabe"></div>
+        <div class="numpad"></div>
+      </div>
     </div>`;
 
   const buehne = root.querySelector('.projekt-buehne');
@@ -65,11 +70,14 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     fuellungEl.style.width = `${Math.min(100, Math.round((100 * stand.training) / TRAINING_ZIEL))}%`;
     const stufe = comboStufe(streak);
     comboEl.textContent = stufe > 1 ? `🔥 x${stufe}` : '';
-    pruefungBtn.classList.toggle('verborgen', !pruefungBereit(stand.training) || stand.gemeistert);
+    // Gemeisterte Reihe: Prüfung nur noch, wenn das Projekt für 0 Fehler einen Bonus vergibt, der noch fehlt
+    const bonusPruefung = stand.gemeistert && !stand.perfekt && projekt.perfektBonus;
+    pruefungBtn.textContent = bonusPruefung ? `⭐ Perfekt-Prüfung: ${projekt.perfektBonus} holen!` : '🏆 Zur Meisterprüfung!';
+    pruefungBtn.classList.toggle('verborgen', !bonusPruefung && (!pruefungBereit(stand.training) || stand.gemeistert));
   }
 
   function naechsteAufgabe() {
-    aufgabe = pickTask({ reihe, stats: profil.aufgabenStats, letzte, wrongStreak });
+    aufgabe = pickTask({ reihe, stats: profil.aufgabenStats, letzte, wrongStreak: erholung > 0 ? 3 : wrongStreak, training: stand.training });
     letzte = [normKey(aufgabe), ...letzte].slice(0, 3);
     gesperrt = false;
     aufgabeEl.classList.remove('richtig', 'zeigt-loesung');
@@ -87,6 +95,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
     if (richtig) {
       s.richtig++;
       wrongStreak = 0;
+      if (erholung > 0) erholung--;
       const stufeVorher = comboStufe(streak);
       const warBereit = pruefungBereit(stand.training);
       const neu = applyAnswer({ training: stand.training, streak }, true);
@@ -95,7 +104,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       const stufeJetzt = comboStufe(streak);
       aufgabeEl.querySelector('.eingabe').textContent = wert;
       aufgabeEl.classList.add('richtig');
-      navigator.vibrate?.(30);
+      sound.vibriere(30);
 
       const res = projekt.beiRichtig(buehne, profil, reihe, { punkte: neu.punkte, streak }) || {};
       if (res.gebaut) schrauber.setMood('jubel');
@@ -118,6 +127,7 @@ export function showWerkstatt(root, ctx, navigate, { reihe }) {
       s.falsch++;
       streak = 0;
       wrongStreak++;
+      if (wrongStreak >= 3) erholung = 2;
       sound.falsch();
       schrauber.setMood('trost');
       projekt.beiFalsch(buehne, profil, reihe);

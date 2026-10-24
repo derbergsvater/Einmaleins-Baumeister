@@ -48,3 +48,12 @@ test('familieGridMarkup: 10 Zellen mit korrekten Zuständen', () => {
   assert.ok((html.match(/schlupfbereit/g) || []).length === 1, 'genau Reihe 3 schlüpfbereit');
   assert.ok((html.match(/ei-locked/g) || []).length === 8, '8 gesperrte Eier (Reihen 1,4-10)');
 });
+
+test('hatAccessoire: Perfekt-Prüfung zählt projektübergreifend', async () => {
+  const { hatAccessoire } = await import('../js/projects/eierfarm.js');
+  const profil = { reihen: { 3: { gemeistert: true, perfekt: true }, 4: { gemeistert: true } },
+    projekte: { eierfarm: { geschluepft: {}, accessoires: { 5: true } } } };
+  assert.equal(hatAccessoire(profil, 3), true);  // perfekt beim Rennwagen bestanden
+  assert.equal(hatAccessoire(profil, 4), false);
+  assert.equal(hatAccessoire(profil, 5), true);  // Altbestand
+});

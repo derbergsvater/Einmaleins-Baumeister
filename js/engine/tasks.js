@@ -44,18 +44,21 @@ export function totalRichtig(stats, reihe) {
   return buildPool(reihe).reduce((summe, t) => summe + stat(stats, t).richtig, 0);
 }
 
-// Gewichtung: falsche Aufgaben drängeln sich vor, sitzende treten zurück
+// Gewichtung: falsche Aufgaben drängeln sich vor, sitzende treten zurück.
+// Je 3 richtige Antworten tilgen einen alten Fehler — wer sich verbessert, kommt wieder runter.
 export function gewicht(s) {
-  if (s.richtig >= 3 && s.falsch === 0) return 0.5;
-  return 1 + 2 * s.falsch;
+  const offen = Math.max(0, s.falsch - Math.floor(s.richtig / 3));
+  if (s.richtig >= 3 && offen === 0) return 0.5;
+  return 1 + 2 * offen;
 }
 
 // letzte: Liste der zuletzt gestellten normKeys (jüngste zuerst) — diese werden gemieden
-export function pickTask({ reihe, stats = {}, letzte = [], wrongStreak = 0 }, rng = Math.random) {
+// training: Trainingsstand der Reihe; fehlt er, zählen die richtigen Antworten im Pool.
+export function pickTask({ reihe, stats = {}, letzte = [], wrongStreak = 0, training }, rng = Math.random) {
   const pool = buildPool(reihe);
   let kandidaten = pool;
 
-  if (totalRichtig(stats, reihe) < ANKER_PHASE_BIS) {
+  if ((training ?? totalRichtig(stats, reihe)) < ANKER_PHASE_BIS) {
     kandidaten = pool.filter(t => istAnker(t, reihe));
   }
 

@@ -82,3 +82,17 @@ test('Migration: altes Profil ohne montierteAddons wird ergänzt', () => {
   assert.deepEqual(profil.projekte.rennwagen.montierteAddons, []);
   assert.equal(profil.projekte.rennwagen.grundbau, 5, 'bestehende Werte bleiben erhalten');
 });
+
+test('Store übersteht strukturell falsche Daten im Speicher', () => {
+  for (const kaputt of ['{}', '[]', '"x"', 'null', '{"profiles":{"p1":null}}']) {
+    const s = createStore(fakeStorage({ 'baumeister.v1': kaputt }));
+    assert.deepEqual(s.list(), [], kaputt);
+    assert.equal(s.getActive(), null, kaputt);
+  }
+});
+
+test('Store wirft nicht, wenn setItem scheitert (Speicher voll)', () => {
+  const storage = { getItem: () => null, setItem: () => { throw new Error('QuotaExceededError'); } };
+  const s = createStore(storage);
+  assert.doesNotThrow(() => s.create('Ella', '🦊'));
+});

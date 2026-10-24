@@ -4,6 +4,7 @@
 function createAudio() {
   let audioCtx = null;
   let stumm = false;
+  try { stumm = localStorage.getItem('baumeister.stumm') === '1'; } catch { /* privater Modus */ }
 
   function kontext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -93,7 +94,12 @@ function createAudio() {
       ton(1319, 0.5, 'sine', 0.62, 0.25);
       rauschen(0.4, 0.6, 0.12, 6000);
     },
-    toggleStumm() { stumm = !stumm; return stumm; },
+    vibriere(ms) { if (!stumm) navigator.vibrate?.(ms); },
+    toggleStumm() {
+      stumm = !stumm;
+      try { localStorage.setItem('baumeister.stumm', stumm ? '1' : '0'); } catch { /* s. o. */ }
+      return stumm;
+    },
     istStumm() { return stumm; },
   };
 }
